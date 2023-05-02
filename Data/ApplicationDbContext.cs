@@ -10,9 +10,18 @@ namespace FitnessTracker.Data
             : base(options)
         {
         }
+        public DbSet<WorkoutModel> Workouts { get; set; }
+        public DbSet<FitnessUser> FitnessUsers { get; set; }
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
+
+            //builder.Entity<Workout>()
+            //    .HasOne(w => w.User)
+            //    .WithMany(u => u.Workouts)
+            //    .HasForeignKey(w => w.UserId)
+            //    .OnDelete(DeleteBehavior.Cascade);
         }
+
     }
 }

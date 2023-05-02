@@ -1,0 +1,46 @@
+﻿@model IEnumerable<FitnessTracker.Models.WorkoutModel>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Workout Index</h1>
+
+
+<div class="row mb-3">
+    <div class="col-12">
+        <a asp-action="Create" class="btn btn-success">
+            <i class="fas fa-plus"></i> Create Workout
+        </a>
+    </div>
+</div>
+
+<div class="row row-cols-1 row-cols-md-3 g-4">
+    @foreach (var item in Model)
+    {
+        <div class="col">
+            <div class="card h-100">
+                <div class="card-header">
+                    <h5 class="card-title">@item.Name</h5>
+                    <h6 class="card-subtitle mb-2 text-muted">@item.Type</h6>
+                </div>
+                <div class="card-body">
+                    <p class="card-text">@item.Description</p>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item">Date: @item.Date.ToShortDateString()</li>
+                        <li class="list-group-item">Duration: @item.Duration.ToString("hh\\:mm\\:ss")</li>
+                        <li class="list-group-item">Calories Burned: @item.CaloriesBurned</li>
+                        <li class="list-group-item">Avg. Heart Rate: @item.AverageHeartRate</li>
+                        <li class="list-group-item">Blood Pressure: @item.BloodPressureSystolic / @item.BloodPressureDiastolic</li>
+                        <li class="list-group-item">User: @item.FitnessUser.UserName</li>
+                    </ul>
+                </div>
+                <div class="card-footer">
+                    <a class="btn btn-primary" href="@Url.Action("Edit", new { id = item.WorkoutId })">Edit</a>
+                    <a class="btn btn-secondary" href="@Url.Action("Details", new { id = item.WorkoutId })">Details</a>
+                    <a class="btn btn-danger" href="@Url.Action("Delete", new { id = item.WorkoutId })">Delete</a>
+                </div>
+            </div>
+        </div>
+    }
+</div>
