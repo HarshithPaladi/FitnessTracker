@@ -29,7 +29,6 @@ namespace FitnessTracker.Models
 
         public int? BloodPressureDiastolic { get; set; }
 
-        [Required]
         [ForeignKey("FitnessUser")]
         public string UserId { get; set; }
         public FitnessUser FitnessUser { get; set; }

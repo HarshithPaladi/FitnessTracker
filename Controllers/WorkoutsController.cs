@@ -28,7 +28,8 @@ namespace FitnessTracker.Controllers
             var currentUserId = _userManager.GetUserId(this.User);
 
             var currentUser = await _userManager.FindByIdAsync(currentUserId);
-            var applicationDbContext = _context.Workouts.Include(w => w.FitnessUser).Where(b => b.UserId==currentUserId);
+            var applicationDbContext = _context.Workouts.Include(w => w.FitnessUser)
+                .Where(b => b.UserId==currentUserId);
             return View(await applicationDbContext.ToListAsync());
         }
 
@@ -54,7 +55,35 @@ namespace FitnessTracker.Controllers
         // GET: Workouts/Create
         public IActionResult Create()
         {
-            ViewData["UserId"] = new SelectList(_context.FitnessUsers, "Id", "Id");
+            //var user = _userManager.GetUserAsync(User);
+            //var currentUser = user.Result;
+            //FitnessUser fitnessUser = _context.FitnessUsers.Find(currentUser.Id);
+            //Console.WriteLine("HIIIII");
+            //Console.WriteLine(currentUser.Gender);
+
+            //ViewBag.FitnessUser = fitnessUser;
+            //ViewData["UserId"] = new SelectList(_context.FitnessUsers, "Id", "Id");
+            //var workout = new WorkoutModel
+            //{
+            //    Name = "",
+            //    Type = "",
+            //    Description = "",
+            //    Date = DateTime.Today,
+            //    Duration = 0,
+            //    CaloriesBurned = 0,
+            //    AverageHeartRate = 0,
+            //    BloodPressureSystolic = 0,
+            //    BloodPressureDiastolic = 0,
+            //    UserId = user.Result.Id,
+            //    FitnessUser = user.Result
+
+
+            //};
+            // Pass userId and FitnessUser to the view
+            //ViewBag.UserId = user.Result.Id;
+            //ViewData["FitnessUser"] = fitnessUser;
+
+
             return View();
         }
 
@@ -63,18 +92,42 @@ namespace FitnessTracker.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("WorkoutId,Name,Type,Description,Date,Duration,CaloriesBurned,AverageHeartRate,BloodPressureSystolic,BloodPressureDiastolic,UserId,FitnessUser")] WorkoutModel workout)
+        public async Task<IActionResult> Create([Bind("WorkoutId,Name,Type,Description,Date,Duration,CaloriesBurned,AverageHeartRate,BloodPressureSystolic,BloodPressureDiastolic,UserId")] WorkoutModel workout)
         {
-                var user = await _userManager.GetUserAsync(User);
-                workout.UserId = user.Id; // set the UserId field of the new WorkoutModel instance
-                workout.FitnessUser = user; // set the FitnessUser navigation property of the new WorkoutModel instance
+            //workout.FitnessUser = await _context.FitnessUsers.FindAsync(workout.UserId);
+            //// Create a new instance of the FitnessUser class and set its properties
+            //FitnessUser fitnessUser = new FitnessUser
+            //{
+            //    Id = workout.UserId,
+            //    // set other properties here based on the values passed in from the form
+            //};
+
+            //workout.FitnessUser = fitnessUser;
+            var user = await _userManager.GetUserAsync(User);
+            workout.UserId = user.Id; // set the UserId field of the new WorkoutModel instance
+            workout.FitnessUser = user; // set the FitnessUser navigation property of the new WorkoutModel instance
             //if (ModelState.IsValid)
             //{
+                //workout.FitnessUser = await _context.FitnessUsers.FindAsync(workout.UserId);
                 _context.Add(workout);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             //}
-            if(!ModelState.IsValid)
+            //if (!ModelState.IsValid)
+            //{
+            //    foreach (var key in ModelState.Keys)
+            //    {
+            //        if (key.Contains("FitnessUser"))
+            //        {
+            //            var errors = ModelState[key].Errors;
+            //            foreach (var error in errors)
+            //            {
+            //                Console.WriteLine(error.ErrorMessage);
+            //            }
+            //        }
+            //    }
+            //}
+            if (!ModelState.IsValid)
             {
                 // if the model state is not valid, return a bad request with the error message
                 var errorMessages = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage);
@@ -83,6 +136,7 @@ namespace FitnessTracker.Controllers
                 var customMessage = string.Join(workoutModel, errorMessage);
                 return BadRequest(customMessage);
             }
+            return View(workout);
         }
         //[HttpPost]
         //[ValidateAntiForgeryToken]

@@ -2,6 +2,7 @@
 
 @{
     ViewData["Title"] = "Create";
+    var fitnessUser = ViewData["FitnessUser"] as FitnessUser;
 }
 
 <h1>Create</h1>
@@ -57,10 +58,12 @@
                 <input asp-for="BloodPressureDiastolic" class="form-control" />
                 <span asp-validation-for="BloodPressureDiastolic" class="text-danger"></span>
             </div>
-            <div class="form-group visually-hidden">
+            <!--
+            <div class="visually-hidden">
                 <label asp-for="UserId" class="control-label"></label>
-                <select asp-for="UserId" class ="form-control" asp-items="ViewBag.UserId"></select>
+                <input asp-for="UserId" class="form-control" value="@ViewBag.UserId" />
             </div>
+            -->
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
             </div>
