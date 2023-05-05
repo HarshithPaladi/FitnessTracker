@@ -3,6 +3,13 @@
 <div class="container">
     <h1>Workouts</h1>
     <hr />
+    <div class="row mb-3">
+        <div class="col-12">
+            <a asp-action="Create" class="btn btn-success">
+                <i class="fas fa-plus"></i> Create Workout
+            </a>
+        </div>
+    </div>
     <div class="row">
         @foreach (var workout in Model)
         {

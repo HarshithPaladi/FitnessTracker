@@ -93,7 +93,7 @@ namespace FitnessTracker.Controllers
 
                 // Create new vitals object if provided in view model
                 if (model.Vitals.OxygenSaturation != null || model.Vitals.DiastolicBP!= null 
-                    || model.Vitals.SystolicBP != null)
+                    || model.Vitals.SystolicBP != null || model.Vitals.HeartRate != null)
                 {
                     var vitals = new VitalsModel
                     {
@@ -106,6 +106,13 @@ namespace FitnessTracker.Controllers
 
                     // Save vitals to database
                     _context.Vitals.Add(vitals);
+                    await _context.SaveChangesAsync();
+
+                    // set the vitalsId in the WorkoutsModel to reference the new VitalsModel
+                    workout.VitalsId = vitals.VitalsId;
+
+                    // update the workouts table
+                    _context.Workouts.Update(workout);
                     await _context.SaveChangesAsync();
                 }
 
