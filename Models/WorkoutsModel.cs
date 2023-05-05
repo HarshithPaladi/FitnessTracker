@@ -23,10 +23,11 @@ namespace FitnessTracker.Models
 
         [Required]
         [Display(Name = "Workout Date")]
-        [DataType(DataType.Date)]
+        [DataType(DataType.DateTime)]
         public DateTime Date { get; set; }
-
         [Required]
+        [Display(Name = "Workout Duration")]
+        [DataType(DataType.Duration)]
         public int Duration { get; set; }
 
         [Required]

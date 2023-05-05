@@ -133,6 +133,9 @@ namespace FitnessTracker.Migrations
                     b.Property<int?>("SystolicBP")
                         .HasColumnType("int");
 
+                    b.Property<int?>("WorkoutsId")
+                        .HasColumnType("int");
+
                     b.HasKey("VitalsId");
 
                     b.ToTable("Vitals");

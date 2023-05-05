@@ -19,9 +19,19 @@
                 <span asp-validation-for="Name" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Type" class="control-label"></label>
-                <input asp-for="Type" class="form-control" />
-                <span asp-validation-for="Type" class="text-danger"></span>
+                <label for="Type">Type:</label>
+                <select class="form-control" id="Type" name="Type">
+                    <option value="">--Select Type--</option>
+                    <option value="Running">Running</option>
+                    <option value="Cycling">Cycling</option>
+                    <option value="Swimming">Swimming</option>
+                    <option value="Custom">Custom</option>
+                </select>
+            </div>
+
+            <div class="form-group d-none" id="custom-type">
+                <label for="CustomType">Custom Type:</label>
+                <input type="text" class="form-control" id="CustomType" name="CustomType" />
             </div>
             <div class="form-group">
                 <label asp-for="Description" class="control-label"></label>
@@ -43,11 +53,42 @@
                 <input asp-for="CaloriesBurned" class="form-control" />
                 <span asp-validation-for="CaloriesBurned" class="text-danger"></span>
             </div>
+            <h4>Vitals Model</h4>
             <div class="form-group">
-                <label asp-for="FitnessUserId" class="control-label"></label>
-                <input asp-for="FitnessUserId" class="form-control" />
-                <span asp-validation-for="FitnessUserId" class="text-danger"></span>
+                <input class="visually-hidden" asp-for="VitalsId" class="form-control" />
+                <span asp-validation-for="VitalsId" class="text-danger"></span>
             </div>
+            <div class="form-group">
+                <label asp-for="Vitals.SystolicBP" class="control-label"></label>
+                <input asp-for="Vitals.SystolicBP" class="form-control" />
+                <span asp-validation-for="Vitals.SystolicBP" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Vitals.DiastolicBP" class="control-label"></label>
+                <input asp-for="Vitals.DiastolicBP" class="form-control" />
+                <span asp-validation-for="Vitals.DiastolicBP" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Vitals.HeartRate" class="control-label"></label>
+                <input asp-for="Vitals.HeartRate" class="form-control" />
+                <span asp-validation-for="Vitals.HeartRate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Vitals.OxygenSaturation" class="control-label"></label>
+                <input asp-for="Vitals.OxygenSaturation" class="form-control" />
+                <span asp-validation-for="Vitals.OxygenSaturation" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input class="visually-hidden" asp-for="Vitals.Date" class="form-control" />
+                <span asp-validation-for="Vitals.Date" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input class="visually-hidden" asp-for="Vitals.FitnessUserId" class="form-control" />
+                <span asp-validation-for="Vitals.FitnessUserId" class="text-danger"></span>
+            </div>
+
+            <input type="hidden" asp-for="Vitals" value="@ViewBag.Vitals"/>
+            <input type="hidden" asp-for="FitnessUserId" />
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
             </div>
@@ -60,5 +101,7 @@
 </div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }

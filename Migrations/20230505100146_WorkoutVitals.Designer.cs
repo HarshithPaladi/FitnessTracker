@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FitnessTracker.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230505061432_WorkoutVitals1")]
-    partial class WorkoutVitals1
+    [Migration("20230505100146_WorkoutVitals")]
+    partial class WorkoutVitals
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -124,7 +124,7 @@ namespace FitnessTracker.Migrations
 
                     b.Property<string>("FitnessUserId")
                         .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("HeartRate")
                         .HasColumnType("int");
@@ -136,8 +136,6 @@ namespace FitnessTracker.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("VitalsId");
-
-                    b.HasIndex("FitnessUserId");
 
                     b.ToTable("Vitals");
                 });
@@ -323,17 +321,6 @@ namespace FitnessTracker.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens", (string)null);
-                });
-
-            modelBuilder.Entity("FitnessTracker.Models.VitalsModel", b =>
-                {
-                    b.HasOne("FitnessTracker.Models.FitnessUser", "FitnessUser")
-                        .WithMany()
-                        .HasForeignKey("FitnessUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("FitnessUser");
                 });
 
             modelBuilder.Entity("FitnessTracker.Models.WorkoutsModel", b =>

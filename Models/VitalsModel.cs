@@ -20,5 +20,7 @@ namespace FitnessTracker.Models
 
         // Reference to FitnessUser
         public string FitnessUserId { get; set; }
+
+        public int? WorkoutsId { get; set; }
     }
 }

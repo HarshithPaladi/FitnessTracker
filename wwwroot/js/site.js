@@ -2,24 +2,35 @@
 // for details on configuring this project to bundle and minify static web assets.
 
 // Write your JavaScript code.
+
+$('#Type').on('change', function () {
+    if ($(this).val() === 'Custom') {
+        $('#custom-type').removeClass('d-none');
+    } else {
+        $('#custom-type').addClass('d-none');
+    }
+});
+
 $(document).ready(function () {
-    $('#vitalsCollapse').on('shown.bs.collapse', function () {
-        $("#HeartRate").prop('required', true);
-        $("#SystolicBP").prop('required', true);
-        $("#DiastolicBP").prop('required', true);
-        $("#OxygenSaturation").prop('required', true);
-    });
-    $('#vitalsCollapse').on('hidden.bs.collapse', function () {
-        $("#HeartRate").prop('required', false);
-        $("#SystolicBP").prop('required', false);
-        $("#DiastolicBP").prop('required', false);
-        $("#OxygenSaturation").prop('required', false);
-    });
-    $('#Type').on('change', function () {
-        if ($(this).val() === 'Custom') {
-            $('#custom-type').removeClass('d-none');
-        } else {
-            $('#custom-type').addClass('d-none');
+    $("#workoutSearchInput").on("keyup", function () {
+        var value = $(this).val().toLowerCase().trim();
+        if (value) {
+            $.ajax({
+                url: "/Workouts/SearchWorkouts?searchString=" + value,
+                type: "GET",
+                success: function (response) {
+                    $("#workoutDropdownMenu").html(response);
+                    $("#workoutDropdown").addClass("show");
+                },
+                error: function (xhr) {
+                    console.log(xhr.responseText);
+                }
+            });
+        }
+        else {
+            $("#workoutDropdownMenu").empty();
+            $("#workoutDropdown").removeClass("show");
         }
     });
 });
+

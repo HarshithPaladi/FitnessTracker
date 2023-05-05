@@ -54,6 +54,24 @@ namespace FitnessTracker.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Vitals",
+                columns: table => new
+                {
+                    VitalsId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Date = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    HeartRate = table.Column<int>(type: "int", nullable: true),
+                    SystolicBP = table.Column<int>(type: "int", nullable: true),
+                    DiastolicBP = table.Column<int>(type: "int", nullable: true),
+                    OxygenSaturation = table.Column<int>(type: "int", nullable: true),
+                    FitnessUserId = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Vitals", x => x.VitalsId);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "AspNetRoleClaims",
                 columns: table => new
                 {
@@ -160,30 +178,6 @@ namespace FitnessTracker.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Vitals",
-                columns: table => new
-                {
-                    VitalsId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Date = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    HeartRate = table.Column<int>(type: "int", nullable: true),
-                    SystolicBP = table.Column<int>(type: "int", nullable: true),
-                    DiastolicBP = table.Column<int>(type: "int", nullable: true),
-                    OxygenSaturation = table.Column<int>(type: "int", nullable: true),
-                    FitnessUserId = table.Column<string>(type: "nvarchar(450)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Vitals", x => x.VitalsId);
-                    table.ForeignKey(
-                        name: "FK_Vitals_AspNetUsers_FitnessUserId",
-                        column: x => x.FitnessUserId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Workouts",
                 columns: table => new
                 {
@@ -195,18 +189,12 @@ namespace FitnessTracker.Migrations
                     Date = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Duration = table.Column<int>(type: "int", nullable: false),
                     CaloriesBurned = table.Column<int>(type: "int", nullable: false),
-                    FitnessUserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    FitnessUserId = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     VitalsId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Workouts", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Workouts_AspNetUsers_FitnessUserId",
-                        column: x => x.FitnessUserId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Workouts_Vitals_VitalsId",
                         column: x => x.VitalsId,
@@ -254,16 +242,6 @@ namespace FitnessTracker.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Vitals_FitnessUserId",
-                table: "Vitals",
-                column: "FitnessUserId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Workouts_FitnessUserId",
-                table: "Workouts",
-                column: "FitnessUserId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Workouts_VitalsId",
                 table: "Workouts",
                 column: "VitalsId");
@@ -293,10 +271,10 @@ namespace FitnessTracker.Migrations
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
-                name: "Vitals");
+                name: "AspNetUsers");
 
             migrationBuilder.DropTable(
-                name: "AspNetUsers");
+                name: "Vitals");
         }
     }
 }

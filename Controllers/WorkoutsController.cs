@@ -7,9 +7,10 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using FitnessTracker.Data;
 using FitnessTracker.Models;
-//using FitnessTracker.Migrations;
+using FitnessTracker.Migrations;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Identity;
+using Newtonsoft.Json;
 
 namespace FitnessTracker.Controllers
 {
@@ -62,6 +63,7 @@ namespace FitnessTracker.Controllers
             ViewBag.CurrentUserId = user.Id;
             var model = new WorkoutsModel
             {
+                Date = DateTime.Now,
                 Vitals = new VitalsModel()
             };
             return View(model);
@@ -72,7 +74,7 @@ namespace FitnessTracker.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,Type,Description,Date,Duration,CaloriesBurned,FitnessUserId,Vitals")]WorkoutsModel model, string FitnessUserId)
+        public async Task<IActionResult> Create([Bind("Id,Name,Type,Description,Date,Duration,CaloriesBurned,FitnessUserId,Vitals")] WorkoutsModel model)
         {
             if (ModelState.IsValid)
             {
@@ -84,6 +86,7 @@ namespace FitnessTracker.Controllers
                     Description = model.Description,
                     Date = model.Date,
                     Duration = model.Duration,
+                    CaloriesBurned = model.CaloriesBurned,
                     FitnessUserId = model.FitnessUserId
                 };
 
@@ -92,7 +95,7 @@ namespace FitnessTracker.Controllers
                 await _context.SaveChangesAsync();
 
                 // Create new vitals object if provided in view model
-                if (model.Vitals.OxygenSaturation != null || model.Vitals.DiastolicBP!= null 
+                if (model.Vitals.OxygenSaturation != null || model.Vitals.DiastolicBP != null
                     || model.Vitals.SystolicBP != null || model.Vitals.HeartRate != null)
                 {
                     var vitals = new VitalsModel
@@ -101,7 +104,8 @@ namespace FitnessTracker.Controllers
                         DiastolicBP = model.Vitals.DiastolicBP,
                         SystolicBP = model.Vitals.SystolicBP,
                         HeartRate = model.Vitals.HeartRate,
-                        FitnessUserId = model.Vitals.FitnessUserId
+                        FitnessUserId = model.Vitals.FitnessUserId,
+                        Date = model.Vitals.Date,
                     };
 
                     // Save vitals to database
@@ -110,9 +114,13 @@ namespace FitnessTracker.Controllers
 
                     // set the vitalsId in the WorkoutsModel to reference the new VitalsModel
                     workout.VitalsId = vitals.VitalsId;
+                    // set the workoutId in the VitalsModel to reference the new WorkoutsModel
+                    vitals.WorkoutsId = workout.Id;
 
                     // update the workouts table
                     _context.Workouts.Update(workout);
+                    // update the vitals table
+                    _context.Vitals.Update(vitals);
                     await _context.SaveChangesAsync();
                 }
 
@@ -161,12 +169,34 @@ namespace FitnessTracker.Controllers
         // GET: Workouts/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
+            var user = _userManager.GetUserAsync(User).Result;
+            ViewBag.CurrentUserId = user.Id;
             if (id == null || _context.Workouts == null)
             {
                 return NotFound();
             }
 
-            var workoutsModel = await _context.Workouts.FindAsync(id);
+            var workoutsModel = await _context.Workouts
+                                    .Include(w => w.Vitals)
+                                    .FirstOrDefaultAsync(m => m.Id == id);
+            // workoutsModel.Vitals = await _context.Vitals.FindAsync(workoutsModel.VitalsId).Result;
+            // // Pass the vitals data to the view
+            var vitals = await _context.Vitals.FindAsync(workoutsModel.VitalsId);
+            ViewBag.Vitals = vitals;
+            // var viewModel = new WorkoutsModel
+            // {
+            //     Vitals= vitals,
+            //     Id = workoutsModel.Id,
+            //     Name = workoutsModel.Name,
+            //     Type = workoutsModel.Type,
+            //     Description = workoutsModel.Description,
+            //     Date = workoutsModel.Date,
+            //     Duration = workoutsModel.Duration,
+            //     CaloriesBurned = workoutsModel.CaloriesBurned,
+            //     FitnessUserId = workoutsModel.FitnessUserId,
+            // };
+
+
             if (workoutsModel == null)
             {
                 return NotFound();
@@ -179,7 +209,7 @@ namespace FitnessTracker.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Type,Description,Date,Duration,CaloriesBurned,FitnessUserId")] WorkoutsModel workoutsModel)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Type,CustomType,Description,Date,Duration,CaloriesBurned,FitnessUserId,VitalsId,Vitals")] WorkoutsModel workoutsModel)
         {
             if (id != workoutsModel.Id)
             {
@@ -190,7 +220,16 @@ namespace FitnessTracker.Controllers
             {
                 try
                 {
+                    // retrieve the Vitals object from the database based on the VitalsId
+                    var vitals = await _context.Vitals.FindAsync(workoutsModel.VitalsId);
+
+                    // update the Vitals object with the values from the form
+                    TryUpdateModelAsync(vitals);
+
+                    // update the WorkoutsModel object with the values from the form
                     _context.Update(workoutsModel);
+
+                    // save changes to the database
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
@@ -208,6 +247,71 @@ namespace FitnessTracker.Controllers
             }
             return View(workoutsModel);
         }
+
+        // [HttpPost]
+        // [ValidateAntiForgeryToken]
+        // public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Type,Description,Date,Duration,CaloriesBurned,FitnessUserId,Vitals,VitalsId")] WorkoutsModel workoutsModel)
+        // {
+        //     var user = await _userManager.GetUserAsync(User);
+        //     ViewBag.CurrentUserId = user.Id;
+        //     if (id != workoutsModel.Id)
+        //     {
+        //         return NotFound();
+        //     }
+
+        //     if (ModelState.IsValid)
+        //     {
+        //         try
+        //         {
+        //             var existingWorkout = await _context.Workouts
+        //                                 .Include(w => w.Vitals)
+        //                                 .Include(w => w.VitalsId)
+        //                                 .FirstOrDefaultAsync(w => w.Id == id && w.FitnessUserId == user.Id);
+
+        //             if (existingWorkout != null)
+        //             {
+        //                 existingWorkout.Name = workoutsModel.Name;
+        //                 existingWorkout.Type = workoutsModel.Type;
+        //                 existingWorkout.Description = workoutsModel.Description;
+        //                 existingWorkout.Date = workoutsModel.Date;
+        //                 existingWorkout.Duration = workoutsModel.Duration;
+        //                 existingWorkout.CaloriesBurned = workoutsModel.CaloriesBurned;
+
+        //                 if (existingWorkout.Vitals == null)
+        //                 {
+        //                     existingWorkout.Vitals = new VitalsModel();
+        //                 }
+        //                 existingWorkout.VitalsId = workoutsModel.VitalsId;
+        //                 existingWorkout.Vitals.HeartRate = workoutsModel.Vitals.HeartRate;
+        //                 existingWorkout.Vitals.DiastolicBP = workoutsModel.Vitals.DiastolicBP;
+        //                 existingWorkout.Vitals.SystolicBP = workoutsModel.Vitals.SystolicBP;
+        //                 existingWorkout.Vitals.OxygenSaturation = workoutsModel.Vitals.OxygenSaturation;
+        //                 existingWorkout.Vitals.Date = workoutsModel.Vitals.Date;
+
+        //                 existingWorkout.Vitals.FitnessUserId = workoutsModel.Vitals.FitnessUserId;
+
+        //                 _context.Update(existingWorkout);
+        //                 await _context.SaveChangesAsync();
+        //                 // workoutsModel.FitnessUserId = ViewBag.CurrentUserId;
+        //                 // _context.Update(workoutsModel);
+        //                 // await _context.SaveChangesAsync();
+        //             }
+        //         }
+        //         catch (DbUpdateConcurrencyException)
+        //         {
+        //             if (!WorkoutsModelExists(workoutsModel.Id))
+        //             {
+        //                 return NotFound();
+        //             }
+        //             else
+        //             {
+        //                 throw;
+        //             }
+        //         }
+        //         return RedirectToAction(nameof(Index));
+        //     }
+        //     return View(workoutsModel);
+        // }
 
         // GET: Workouts/Delete/5
         public async Task<IActionResult> Delete(int? id)
@@ -237,18 +341,23 @@ namespace FitnessTracker.Controllers
                 return Problem("Entity set 'ApplicationDbContext.Workouts'  is null.");
             }
             var workoutsModel = await _context.Workouts.FindAsync(id);
+            var vitalsModel = await _context.Vitals.FindAsync(workoutsModel.VitalsId);
             if (workoutsModel != null)
             {
                 _context.Workouts.Remove(workoutsModel);
             }
-            
+            if (vitalsModel != null)
+            {
+                _context.Vitals.Remove(vitalsModel);
+            }
+
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool WorkoutsModelExists(int id)
         {
-          return (_context.Workouts?.Any(e => e.Id == id)).GetValueOrDefault();
+            return (_context.Workouts?.Any(e => e.Id == id)).GetValueOrDefault();
         }
     }
 }

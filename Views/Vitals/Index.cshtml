@@ -1,65 +1,99 @@
 ﻿@model IEnumerable<FitnessTracker.Models.VitalsModel>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Vitals";
 }
 
-<h1>Index</h1>
+<div class="container">
+    <h1>Vitals</h1>
+    <div class="row mb-3">
+        <div class="col-12">
+            <a asp-action="Create" class="btn btn-success">
+                <i class="fas fa-plus"></i> Add Vitals
+            </a>
+        </div>
+    </div>
+    @* <div class="row">
+    <div class="col-md-12">
+    <form asp-action="Index" method="get">
+    <div class="form-row">
+    <div class="form-group col-md-2">
+    <label asp-for="Date" class="control-label"></label>
+    <input asp-for="Date" class="form-control" type="date">
+    </div>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Date)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.HeartRate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.SystolicBP)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.DiastolicBP)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.OxygenSaturation)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.FitnessUserId)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Date)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.HeartRate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.SystolicBP)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DiastolicBP)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.OxygenSaturation)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.FitnessUserId)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.VitalsId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.VitalsId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.VitalsId">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+    <div class="form-group col-md-2">
+    <label asp-for="HeartRate" class="control-label"></label>
+    <input asp-for="HeartRate" class="form-control">
+    </div>
+
+    <div class="form-group col-md-2">
+    <label asp-for="SystolicBP" class="control-label"></label>
+    <input asp-for="SystolicBP" class="form-control">
+    </div>
+
+    <div class="form-group col-md-2">
+    <label asp-for="DiastolicBP" class="control-label"></label>
+    <input asp-for="DiastolicBP" class="form-control">
+    </div>
+
+    <div class="form-group col-md-2">
+    <label asp-for="OxygenSaturation" class="control-label"></label>
+    <input asp-for="OxygenSaturation" class="form-control">
+    </div>
+
+    <div class="form-group col-md-2">
+    <button type="submit" class="btn btn-primary">Search</button>
+    </div>
+    </div>
+    </form>
+    </div>
+    </div> *@
+
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>Time</th>
+                <th>Heart Rate</th>
+                <th>Systolic BP</th>
+                <th>Diastolic BP</th>
+                <th>Oxygen Saturation</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.Date.ToShortDateString()</td>
+                    <td>@item.Date.ToShortTimeString()</td>
+                    <td>@item.HeartRate</td>
+                    <td>@item.SystolicBP</td>
+                    <td>@item.DiastolicBP</td>
+                    <td>@item.OxygenSaturation</td>
+                    <td>
+                        @* Removed Edit button due to Vitals should not be edited once entered *@
+                        @* <a asp-action="Edit" asp-route-id="@item.VitalsId" class="btn btn-sm btn-primary">
+                    <i class="bi bi-pencil-square"></i></a> *@
+                        @if (item.WorkoutsId == null)
+                        {
+                            <a asp-action="Delete" asp-route-id="@item.VitalsId" class="btn btn-sm btn-danger">
+                                <i class="bi bi-trash"></i></a>
+                        }
+                        else
+                        {
+                            // Add a tooltip to explain why the delete button is disabled
+                            <a asp-action="Delete" asp-route-id="@item.VitalsId" class="btn btn-sm btn-danger disabled"
+                                data-toggle="tooltip" title="Vitals cannot be deleted once associated with a workout">
+                                <i class="bi bi-trash"></i>
+                            </a>
+
+
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

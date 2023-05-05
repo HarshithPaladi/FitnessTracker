@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FitnessTracker.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230505063046_WorkoutVitals2")]
-    partial class WorkoutVitals2
+    [Migration("20230505195256_LinkWorkoutVital")]
+    partial class LinkWorkoutVital
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -133,6 +133,9 @@ namespace FitnessTracker.Migrations
                         .HasColumnType("int");
 
                     b.Property<int?>("SystolicBP")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("WorkoutsId")
                         .HasColumnType("int");
 
                     b.HasKey("VitalsId");

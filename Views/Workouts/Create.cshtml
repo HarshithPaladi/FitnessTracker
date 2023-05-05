@@ -33,47 +33,68 @@
                 <input type="text" class="form-control" id="CustomType" name="CustomType" />
             </div>
             <div class="form-group">
-                <label asp-for="Description" class="control-label"></label>
-                <input asp-for="Description" class="form-control" />
-                <span asp-validation-for="Description" class="text-danger"></span>
-            </div>
-            <div class="form-group">
                 <label asp-for="Date" class="control-label"></label>
-                <input asp-for="Date" class="form-control" />
+                <input asp-for="Date" class="form-control" value="@DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss")" />
                 <span asp-validation-for="Date" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Duration" class="control-label"></label>
-                <input asp-for="Duration" class="form-control" />
+                <label>Workout Duration</label>
+                <div class="row">
+                    <div class="col-4">
+                        <input type="number" min="0" max="23" class="form-control" placeholder="Hours" id="hours" />
+                    </div>
+                    <div class="col-4">
+                        <input type="number" min="0" max="59" class="form-control" placeholder="Minutes" id="minutes" />
+                    </div>
+                    <div class="col-4">
+                        <input type="number" min="0" max="59" class="form-control" placeholder="Seconds" id="seconds" />
+                    </div>
+                </div>
                 <span asp-validation-for="Duration" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="CaloriesBurned" class="control-label"></label>
-                <input asp-for="CaloriesBurned" class="form-control" />
+                <input asp-for="CaloriesBurned" class="form-control" value="" min="1" />
                 <span asp-validation-for="CaloriesBurned" class="text-danger"></span>
             </div>
+            <div class="form-group">
+                <label asp-for="Description" class="control-label"></label>
+                <textarea asp-for="Description" class="form-control"></textarea>
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
             <input type="hidden" name="FitnessUserId" value="@ViewBag.CurrentUserId" />
+            <input type="hidden" name="Duration" id="Duration" value="" />
+
 
 
             <hr />
             <h4>VitalsModel</h4>
             <div class="form-group">
                 <label for="SystolicBP">Systolic BP:</label>
-                <input type="text" class="form-control" id="SystolicBP" name="Vitals.SystolicBP" value="@Model.Vitals?.SystolicBP" />
+                <input type="text" class="form-control" id="SystolicBP" name="Vitals.SystolicBP"
+                    value="@Model.Vitals?.SystolicBP" min="1" max="400" />
+                <span asp-validation-for="Vitals.SystolicBP" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label for="DiastolicBP">Diastolic BP:</label>
-                <input type="text" class="form-control" id="DiastolicBP" name="Vitals.DiastolicBP" value="@Model.Vitals?.DiastolicBP" />
+                <input type="text" class="form-control" id="DiastolicBP" name="Vitals.DiastolicBP"
+                    value="@Model.Vitals?.DiastolicBP" min="1" max="400" />
+                <span asp-validation-for="Vitals.DiastolicBP" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label for="HeartRate">Heart Rate:</label>
-                <input type="number" min="1" max="500" class="form-control" id="HeartRate" name="Vitals.HeartRate" value="@Model.Vitals?.HeartRate" />
+                <input type="number" min="1" max="500" class="form-control" id="HeartRate" name="Vitals.HeartRate"
+                    value="@Model.Vitals?.HeartRate" />
+                <span asp-validation-for="Vitals.HeartRate" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label for="OxygenSaturation">Oxygen Saturation:</label>
-                <input type="number" min="1" max="100" class="form-control" id="OxygenSaturation" name="Vitals.OxygenSaturation" value="@Model.Vitals?.OxygenSaturation" />
+                <input type="number" min="1" max="100" class="form-control" id="OxygenSaturation"
+                    name="Vitals.OxygenSaturation" value="@Model.Vitals?.OxygenSaturation" />
+                <span asp-validation-for="Vitals.OxygenSaturation" class="text-danger"></span>
             </div>
             <input type="hidden" name="Vitals.FitnessUserId" value="@ViewBag.CurrentUserId" />
+            <input type="hidden" name="Vitals.Date" value="@DateTime.Now" />
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
             </div>
@@ -87,5 +108,17 @@
 @section Scripts {
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
+            <script>
+        $(function () {
+            $('form').submit(function () {
+                var hours = parseInt($('#hours').val()) || 0;
+                var minutes = parseInt($('#minutes').val()) || 0;
+                var seconds = parseInt($('#seconds').val()) || 0;
+                var duration = hours * 3600 + minutes * 60 + seconds;
+                $('#Duration').val(duration);
+            });
+        });
+    </script>
     }
+
 }
