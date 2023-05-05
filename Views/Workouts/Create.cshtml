@@ -1,4 +1,4 @@
-﻿@model FitnessTracker.Models.WorkoutModel
+﻿@model FitnessTracker.Models.WorkoutsModel
 
 @{
     ViewData["Title"] = "Create";
@@ -6,7 +6,7 @@
 
 <h1>Create</h1>
 
-<h4>WorkoutModel</h4>
+<h4>WorkoutsModel</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -42,36 +42,40 @@
                 <input asp-for="CaloriesBurned" class="form-control" />
                 <span asp-validation-for="CaloriesBurned" class="text-danger"></span>
             </div>
+            <input type="hidden" name="FitnessUserId" value="@ViewBag.CurrentUserId" />
+
+
+            <hr />
+            <h4>VitalsModel</h4>
             <div class="form-group">
-                <label asp-for="AverageHeartRate" class="control-label"></label>
-                <input asp-for="AverageHeartRate" class="form-control" />
-                <span asp-validation-for="AverageHeartRate" class="text-danger"></span>
+                <label for="SystolicBP">Systolic BP:</label>
+                <input type="text" class="form-control" id="SystolicBP" name="Vitals.SystolicBP" value="@Model.Vitals?.SystolicBP" />
             </div>
             <div class="form-group">
-                <label asp-for="BloodPressureSystolic" class="control-label"></label>
-                <input asp-for="BloodPressureSystolic" class="form-control" />
-                <span asp-validation-for="BloodPressureSystolic" class="text-danger"></span>
+                <label for="DiastolicBP">Diastolic BP:</label>
+                <input type="text" class="form-control" id="DiastolicBP" name="Vitals.DiastolicBP" value="@Model.Vitals?.DiastolicBP" />
             </div>
             <div class="form-group">
-                <label asp-for="BloodPressureDiastolic" class="control-label"></label>
-                <input asp-for="BloodPressureDiastolic" class="form-control" />
-                <span asp-validation-for="BloodPressureDiastolic" class="text-danger"></span>
+                <label for="HeartRate">Heart Rate:</label>
+                <input type="number" min="1" max="500" class="form-control" id="HeartRate" name="Vitals.HeartRate" value="@Model.Vitals?.HeartRate" />
             </div>
-            <div class="form-group visually-hidden">
-                <label asp-for="UserId" class="control-label"></label>
-                <select asp-for="UserId" class ="form-control" asp-items="ViewBag.UserId"></select>
+            <div class="form-group">
+                <label for="OxygenSaturation">Oxygen Saturation:</label>
+                <input type="number" min="1" max="100" class="form-control" id="OxygenSaturation" name="Vitals.OxygenSaturation" value="@Model.Vitals?.OxygenSaturation" />
             </div>
+            <input type="hidden" name="Vitals.FitnessUserId" value="@ViewBag.CurrentUserId" />
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
             </div>
         </form>
     </div>
-</div>
 
+</div>
 <div>
     <a asp-action="Index">Back to List</a>
 </div>
-
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }

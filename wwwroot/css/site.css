@@ -16,3 +16,6 @@ html {
 body {
   margin-bottom: 60px;
 }
+.collapse:not(.show):not(#vitalsCollapse) {
+    display: none;
+}

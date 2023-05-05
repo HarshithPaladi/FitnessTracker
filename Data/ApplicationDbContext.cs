@@ -10,8 +10,9 @@ namespace FitnessTracker.Data
             : base(options)
         {
         }
-        public DbSet<WorkoutModel> Workouts { get; set; }
+        public DbSet<WorkoutsModel> Workouts { get; set; }
         public DbSet<FitnessUser> FitnessUsers { get; set; }
+        public DbSet<VitalsModel> Vitals { get; set; }
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);

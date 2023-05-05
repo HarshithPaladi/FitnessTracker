@@ -9,11 +9,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace FitnessTracker.Data.Migrations
+namespace FitnessTracker.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230502100500_InitialModel")]
-    partial class InitialModel
+    [Migration("20230505063046_WorkoutVitals2")]
+    partial class WorkoutVitals2
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -106,6 +106,84 @@ namespace FitnessTracker.Data.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers", (string)null);
+                });
+
+            modelBuilder.Entity("FitnessTracker.Models.VitalsModel", b =>
+                {
+                    b.Property<int>("VitalsId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("VitalsId"), 1L, 1);
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("DiastolicBP")
+                        .HasColumnType("int");
+
+                    b.Property<string>("FitnessUserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("HeartRate")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("OxygenSaturation")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("SystolicBP")
+                        .HasColumnType("int");
+
+                    b.HasKey("VitalsId");
+
+                    b.ToTable("Vitals");
+                });
+
+            modelBuilder.Entity("FitnessTracker.Models.WorkoutsModel", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int>("CaloriesBurned")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasMaxLength(250)
+                        .HasColumnType("nvarchar(250)");
+
+                    b.Property<int>("Duration")
+                        .HasColumnType("int");
+
+                    b.Property<string>("FitnessUserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<int?>("VitalsId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("VitalsId");
+
+                    b.ToTable("Workouts");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -243,6 +321,15 @@ namespace FitnessTracker.Data.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens", (string)null);
+                });
+
+            modelBuilder.Entity("FitnessTracker.Models.WorkoutsModel", b =>
+                {
+                    b.HasOne("FitnessTracker.Models.VitalsModel", "Vitals")
+                        .WithMany()
+                        .HasForeignKey("VitalsId");
+
+                    b.Navigation("Vitals");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

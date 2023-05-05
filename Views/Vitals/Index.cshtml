@@ -1,0 +1,65 @@
+﻿@model IEnumerable<FitnessTracker.Models.VitalsModel>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Date)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.HeartRate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SystolicBP)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DiastolicBP)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.OxygenSaturation)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FitnessUserId)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Date)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.HeartRate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SystolicBP)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DiastolicBP)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.OxygenSaturation)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FitnessUserId)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.VitalsId">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.VitalsId">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.VitalsId">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

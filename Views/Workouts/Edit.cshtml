@@ -1,4 +1,4 @@
-﻿@model FitnessTracker.Models.WorkoutModel
+﻿@model FitnessTracker.Models.WorkoutsModel
 
 @{
     ViewData["Title"] = "Edit";
@@ -6,13 +6,13 @@
 
 <h1>Edit</h1>
 
-<h4>WorkoutModel</h4>
+<h4>WorkoutsModel</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="WorkoutId" />
+            <input type="hidden" asp-for="Id" />
             <div class="form-group">
                 <label asp-for="Name" class="control-label"></label>
                 <input asp-for="Name" class="form-control" />
@@ -44,24 +44,9 @@
                 <span asp-validation-for="CaloriesBurned" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="AverageHeartRate" class="control-label"></label>
-                <input asp-for="AverageHeartRate" class="form-control" />
-                <span asp-validation-for="AverageHeartRate" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="BloodPressureSystolic" class="control-label"></label>
-                <input asp-for="BloodPressureSystolic" class="form-control" />
-                <span asp-validation-for="BloodPressureSystolic" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="BloodPressureDiastolic" class="control-label"></label>
-                <input asp-for="BloodPressureDiastolic" class="form-control" />
-                <span asp-validation-for="BloodPressureDiastolic" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="UserId" class="control-label"></label>
-                <select asp-for="UserId" class="form-control" asp-items="ViewBag.UserId"></select>
-                <span asp-validation-for="UserId" class="text-danger"></span>
+                <label asp-for="FitnessUserId" class="control-label"></label>
+                <input asp-for="FitnessUserId" class="form-control" />
+                <span asp-validation-for="FitnessUserId" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />

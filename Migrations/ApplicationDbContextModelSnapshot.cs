@@ -4,18 +4,16 @@ using FitnessTracker.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace FitnessTracker.Data.Migrations
+namespace FitnessTracker.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230502183324_WorkoutMigration")]
-    partial class WorkoutMigration
+    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
     {
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -108,22 +106,45 @@ namespace FitnessTracker.Data.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
-            modelBuilder.Entity("FitnessTracker.Models.WorkoutModel", b =>
+            modelBuilder.Entity("FitnessTracker.Models.VitalsModel", b =>
                 {
-                    b.Property<int>("WorkoutId")
+                    b.Property<int>("VitalsId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("WorkoutId"), 1L, 1);
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("VitalsId"), 1L, 1);
 
-                    b.Property<int?>("AverageHeartRate")
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("DiastolicBP")
                         .HasColumnType("int");
 
-                    b.Property<int?>("BloodPressureDiastolic")
+                    b.Property<string>("FitnessUserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("HeartRate")
                         .HasColumnType("int");
 
-                    b.Property<int?>("BloodPressureSystolic")
+                    b.Property<int?>("OxygenSaturation")
                         .HasColumnType("int");
+
+                    b.Property<int?>("SystolicBP")
+                        .HasColumnType("int");
+
+                    b.HasKey("VitalsId");
+
+                    b.ToTable("Vitals");
+                });
+
+            modelBuilder.Entity("FitnessTracker.Models.WorkoutsModel", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<int>("CaloriesBurned")
                         .HasColumnType("int");
@@ -133,26 +154,32 @@ namespace FitnessTracker.Data.Migrations
 
                     b.Property<string>("Description")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(250)
+                        .HasColumnType("nvarchar(250)");
 
                     b.Property<int>("Duration")
                         .HasColumnType("int");
 
-                    b.Property<string>("Name")
+                    b.Property<string>("FitnessUserId")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("Type")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<int?>("VitalsId")
+                        .HasColumnType("int");
 
-                    b.HasKey("WorkoutId");
+                    b.HasKey("Id");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("VitalsId");
 
                     b.ToTable("Workouts");
                 });
@@ -294,15 +321,13 @@ namespace FitnessTracker.Data.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("FitnessTracker.Models.WorkoutModel", b =>
+            modelBuilder.Entity("FitnessTracker.Models.WorkoutsModel", b =>
                 {
-                    b.HasOne("FitnessTracker.Models.FitnessUser", "User")
+                    b.HasOne("FitnessTracker.Models.VitalsModel", "Vitals")
                         .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("VitalsId");
 
-                    b.Navigation("User");
+                    b.Navigation("Vitals");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
