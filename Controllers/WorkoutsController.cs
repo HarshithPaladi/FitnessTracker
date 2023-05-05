@@ -30,6 +30,7 @@ namespace FitnessTracker.Controllers
             var currentUserId = _userManager.GetUserId(this.User);
             var workouts = await _context.Workouts
                 .Where(w => w.FitnessUserId == currentUserId)
+                .OrderByDescending(w => w.Date)
                 .ToListAsync();
 
             return View(workouts);
@@ -44,6 +45,7 @@ namespace FitnessTracker.Controllers
             }
 
             var workoutsModel = await _context.Workouts
+                .Include(w => w.Vitals)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (workoutsModel == null)
             {

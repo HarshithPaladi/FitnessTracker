@@ -4,57 +4,76 @@
     ViewData["Title"] = "Details";
 }
 
-<h1>Details</h1>
+<h1>@ViewData["Title"]</h1>
 
 <div>
     <h4>WorkoutsModel</h4>
     <hr />
     <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Name)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Name)
-        </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Type)
         </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Type)
+        <dd class="col-sm-10">
+            @Model.Type
         </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Description)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Description)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Date)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Date)
-        </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Duration)
         </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Duration)
+        <dd class="col-sm-10">
+            @Model.Duration
         </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.CaloriesBurned)
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Date)
         </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.CaloriesBurned)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.FitnessUserId)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.FitnessUserId)
+        <dd class="col-sm-10">
+            @Model.Date
         </dd>
     </dl>
 </div>
+
 <div>
-    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+    <h4>Vitals</h4>
+    <hr />
+    @if (Model.Vitals == null || Model.Vitals.VitalsId == null)
+    {
+        <p>No vitals available for this workout.</p>
+    }
+    else
+    {
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Vitals.Date)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Vitals.HeartRate)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Vitals.SystolicBP)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Vitals.DiastolicBP)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Vitals.OxygenSaturation)
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                    <tr>
+                        <td>@Model.Vitals.Date</td>
+                        <td>@Model.Vitals.HeartRate</td>
+                        <td>@Model.Vitals.SystolicBP</td>
+                        <td>@Model.Vitals.DiastolicBP</td>
+                        <td>@Model.Vitals.OxygenSaturation</td>
+                    </tr>
+            </tbody>
+        </table>
+    }
 </div>
+
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
+    <a asp-action="Index">Back to List</a>
+</p>

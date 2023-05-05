@@ -15,4 +15,11 @@ $(document).ready(function () {
         $("#DiastolicBP").prop('required', false);
         $("#OxygenSaturation").prop('required', false);
     });
+    $('#Type').on('change', function () {
+        if ($(this).val() === 'Custom') {
+            $('#custom-type').removeClass('d-none');
+        } else {
+            $('#custom-type').addClass('d-none');
+        }
+    });
 });
