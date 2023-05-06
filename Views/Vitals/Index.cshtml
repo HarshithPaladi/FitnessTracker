@@ -3,7 +3,14 @@
 @{
     ViewData["Title"] = "Vitals";
 }
-
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger">@TempData["ErrorMessage"]</div>
+    // Back to the Index view
+    <a asp-action="Index" class="btn btn-primary">Back to Vitals</a>
+}
+@if (TempData["ErrorMessage"] == null)
+{
 <div class="container">
     <h1>Vitals</h1>
     <div class="row mb-3">
@@ -85,7 +92,7 @@
                         {
                             // Add a tooltip to explain why the delete button is disabled
                             <a asp-action="Delete" asp-route-id="@item.VitalsId" class="btn btn-sm btn-danger disabled"
-                                data-toggle="tooltip" title="Vitals cannot be deleted once associated with a workout">
+                                title="Vitals cannot be deleted once associated with a workout" role="button">
                                 <i class="bi bi-trash"></i>
                             </a>
 
@@ -97,3 +104,14 @@
         </tbody>
     </table>
 </div>
+}
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    <script>
+        $(function () {
+            $('[data-toggle="tooltip"]').tooltip()
+        })
+    </script>
+    }
+}
+```

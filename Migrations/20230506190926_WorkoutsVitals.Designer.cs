@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FitnessTracker.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230505195256_LinkWorkoutVital")]
-    partial class LinkWorkoutVital
+    [Migration("20230506190926_WorkoutsVitals")]
+    partial class WorkoutsVitals
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace FitnessTracker.Migrations
 {
-    public partial class WorkoutVitals : Migration
+    public partial class WorkoutsVitals : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -64,7 +64,8 @@ namespace FitnessTracker.Migrations
                     SystolicBP = table.Column<int>(type: "int", nullable: true),
                     DiastolicBP = table.Column<int>(type: "int", nullable: true),
                     OxygenSaturation = table.Column<int>(type: "int", nullable: true),
-                    FitnessUserId = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    FitnessUserId = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    WorkoutsId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {

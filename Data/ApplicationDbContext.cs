@@ -2,6 +2,8 @@
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection.Emit;
+// using Newtonsoft.Json;
+using System.Text.Json;
 
 namespace FitnessTracker.Data
 {
@@ -17,6 +19,18 @@ namespace FitnessTracker.Data
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
+            //builder.Entity<WorkoutsModel>()
+            //    .HasOne(w => w.Vitals)
+            //    .WithMany()
+            //    .HasForeignKey(w => w.VitalsId)
+            //    .IsRequired(false);
+
+            //builder.Entity<VitalsModel>()
+            //    .Property(v => v.Date)
+            //    .IsRequired(false);
+            //builder.Entity<VitalsModel>()
+            //    .Property(v => v.FitnessUserId)
+            //    .IsRequired(false);
 
             //builder.Entity<Workout>()
             //    .HasOne(w => w.User)

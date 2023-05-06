@@ -42,6 +42,7 @@ namespace FitnessTracker.Models
 
         // Optional vitals Navigation property
         public int? VitalsId { get; set; }
-        public VitalsModel Vitals { get; set; }
+        public VitalsModel? Vitals { get; set; }
+        // public bool HasVitals => Vitals != null && Vitals.Date != default && !string.IsNullOrEmpty(Vitals.FitnessUserId);
     }
 }

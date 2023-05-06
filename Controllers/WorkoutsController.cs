@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using FitnessTracker.Data;
 using FitnessTracker.Models;
-using FitnessTracker.Migrations;
+//using FitnessTracker.Migrations;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Identity;
 using Newtonsoft.Json;
@@ -63,8 +63,7 @@ namespace FitnessTracker.Controllers
             ViewBag.CurrentUserId = user.Id;
             var model = new WorkoutsModel
             {
-                Date = DateTime.Now,
-                Vitals = new VitalsModel()
+                Date = DateTime.Now
             };
             return View(model);
         }
@@ -95,8 +94,8 @@ namespace FitnessTracker.Controllers
                 await _context.SaveChangesAsync();
 
                 // Create new vitals object if provided in view model
-                if (model.Vitals.OxygenSaturation != null || model.Vitals.DiastolicBP != null
-                    || model.Vitals.SystolicBP != null || model.Vitals.HeartRate != null)
+                if (model.Vitals != null && (model.Vitals.OxygenSaturation != null || model.Vitals.DiastolicBP != null
+                    || model.Vitals.SystolicBP != null || model.Vitals.HeartRate != null))
                 {
                     var vitals = new VitalsModel
                     {
@@ -126,18 +125,14 @@ namespace FitnessTracker.Controllers
 
                 return RedirectToAction(nameof(Index));
             }
-            if (!ModelState.IsValid)
-            {
-                // if the model state is not valid, return a bad request with the error message
-                var errorMessages = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage);
-                var workoutModel = model.ToString();
-                var errorMessage = string.Join(", ", errorMessages);
-                var customMessage = string.Join(workoutModel, errorMessage);
-                return BadRequest(customMessage);
-            }
-
-            return View(model);
+            // if the model state is not valid, return a bad request with the error message
+            var errorMessages = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage);
+            var workoutModel = model.ToString();
+            var errorMessage = string.Join(", ", errorMessages);
+            var customMessage = string.Join(workoutModel, errorMessage);
+            return BadRequest(customMessage);
         }
+
 
         //[HttpPost]
         //[ValidateAntiForgeryToken]
@@ -220,12 +215,15 @@ namespace FitnessTracker.Controllers
             {
                 try
                 {
+                    
                     // retrieve the Vitals object from the database based on the VitalsId
                     var vitals = await _context.Vitals.FindAsync(workoutsModel.VitalsId);
 
-                    // update the Vitals object with the values from the form
-                    TryUpdateModelAsync(vitals);
-
+                    // update the Vitals object with the values from the form if the Vitals object exists
+                    if (vitals != null)
+                    {
+                        await TryUpdateModelAsync(vitals);
+                    }
                     // update the WorkoutsModel object with the values from the form
                     _context.Update(workoutsModel);
 

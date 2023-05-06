@@ -145,6 +145,13 @@ namespace FitnessTracker.Controllers
 
             var vitalsModel = await _context.Vitals
                 .FirstOrDefaultAsync(m => m.VitalsId == id);
+            // Do not delete if workoutId is present
+            if (vitalsModel.WorkoutsId != null)
+            {
+                // Add error message to TempData to display on the DeleteConfirmation page
+                TempData["ErrorMessage"] = "This Vitals record cannot be deleted because it is associated with a Workout. Please delete the associated Workout first.";
+                return RedirectToAction(nameof(Index), new { id = vitalsModel.VitalsId });
+            }
             if (vitalsModel == null)
             {
                 return NotFound();
