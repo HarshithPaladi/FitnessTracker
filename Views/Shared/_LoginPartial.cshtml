@@ -6,6 +6,41 @@
 @if (SignInManager.IsSignedIn(User))
 {
     <li class="nav-item">
+            <label>
+                <input type="checkbox" id="theme-toggle">
+                Switch to dark mode
+            </label>
+            <script>
+                const toggleBtn = document.getElementById('theme-toggle');
+                const body = document.querySelector('body');
+
+                toggleBtn.addEventListener('click', function () {
+                    body.classList.toggle('dark');
+
+                    const btnPrimary = document.querySelectorAll('.btn-primary');
+                    btnPrimary.forEach(function (btn) {
+                        btn.classList.toggle('dark');
+                    });
+
+                    const card = document.querySelectorAll('.card');
+                    card.forEach(function (card) {
+                        card.classList.toggle('dark');
+                    });
+
+                    const cardTitle = document.querySelectorAll('.card-title');
+                    cardTitle.forEach(function (title) {
+                        title.classList.toggle('dark');
+                    });
+
+                    const cardText = document.querySelectorAll('.card-text');
+                    cardText.forEach(function (text) {
+                        text.classList.toggle('dark');
+                    });
+                });
+
+            </script>
+    </li>
+    <li class="nav-item">
         <a  class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hello @User.Identity?.Name!</a>
     </li>
     <li class="nav-item">
