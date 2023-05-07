@@ -31,11 +31,20 @@ namespace FitnessTracker.Controllers
         [HttpGet("Search/{searchTerm}")]
         public async Task<ActionResult<IEnumerable<WorkoutsModel>>> SearchWorkouts(string searchTerm)
         {
+            var currentUserId = _context.Users.Where(u => u.UserName == User.Identity.Name)
+                                    .Select(u => u.Id).FirstOrDefault();
+
             var workouts = await _context.Workouts
                 .Where(w => EF.Functions.Like(w.Name, $"%{searchTerm}%")
                     || EF.Functions.Like(w.Type, $"%{searchTerm}%")
                     || EF.Functions.Like(w.Description, $"%{searchTerm}%")
-                    || EF.Functions.Like(w.CaloriesBurned.ToString(), $"%{searchTerm}%"))
+                    || EF.Functions.Like(w.CaloriesBurned.ToString(), $"%{searchTerm}%")
+                    || EF.Functions.Like(w.Vitals.HeartRate.ToString(), $"%{searchTerm}%")
+                    || EF.Functions.Like(w.Vitals.DiastolicBP.ToString(), $"%{searchTerm}%")
+                    || EF.Functions.Like(w.Vitals.SystolicBP.ToString(), $"%{searchTerm}%")
+                    || EF.Functions.Like(w.Vitals.OxygenSaturation.ToString(), $"%{searchTerm}%"))
+                    // fitnessuserid = currentUserId
+                    .Where(w => w.FitnessUserId == currentUserId)
                 .OrderByDescending(w => w.Date)
                 .ToListAsync();
 

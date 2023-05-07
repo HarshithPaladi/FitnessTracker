@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using FitnessTracker.Data;
 using FitnessTracker.Models;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authorization;
 
 namespace FitnessTracker.Controllers
 {
@@ -23,6 +24,7 @@ namespace FitnessTracker.Controllers
         }
 
         // GET: Vitals
+        [Authorize]
         public async Task<IActionResult> Index()
         {
             var currentUserId = _userManager.GetUserId(this.User);
@@ -38,6 +40,7 @@ namespace FitnessTracker.Controllers
         }
 
         // GET: Vitals/Details/5
+        [Authorize]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null || _context.Vitals == null)
@@ -56,6 +59,7 @@ namespace FitnessTracker.Controllers
         }
 
         // GET: Vitals/Create
+        [Authorize]
         public IActionResult Create()
         {
             var user = _userManager.GetUserAsync(User).Result;
@@ -67,6 +71,7 @@ namespace FitnessTracker.Controllers
         // POST: Vitals/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("VitalsId,Date,HeartRate,SystolicBP,DiastolicBP,OxygenSaturation,FitnessUserId")] VitalsModel vitalsModel)
@@ -136,14 +141,17 @@ namespace FitnessTracker.Controllers
         // }
 
         // GET: Vitals/Delete/5
+        [Authorize]
         public async Task<IActionResult> Delete(int? id)
         {
+            var currentUserId = _userManager.GetUserId(this.User);
             if (id == null || _context.Vitals == null)
             {
                 return NotFound();
             }
 
             var vitalsModel = await _context.Vitals
+            .Where(w => w.FitnessUserId == currentUserId)
                 .FirstOrDefaultAsync(m => m.VitalsId == id);
             // Do not delete if workoutId is present
             if (vitalsModel.WorkoutsId != null)
@@ -161,27 +169,29 @@ namespace FitnessTracker.Controllers
         }
 
         // POST: Vitals/Delete/5
+        [Authorize]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
+            var currentUserId = _userManager.GetUserId(this.User);
             if (_context.Vitals == null)
             {
                 return Problem("Entity set 'ApplicationDbContext.Vitals'  is null.");
             }
             var vitalsModel = await _context.Vitals.FindAsync(id);
-            if (vitalsModel != null)
+            if (vitalsModel != null && vitalsModel.FitnessUserId == currentUserId)
             {
                 _context.Vitals.Remove(vitalsModel);
             }
-            
+
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool VitalsModelExists(int id)
         {
-          return (_context.Vitals?.Any(e => e.VitalsId == id)).GetValueOrDefault();
+            return (_context.Vitals?.Any(e => e.VitalsId == id)).GetValueOrDefault();
         }
     }
 }

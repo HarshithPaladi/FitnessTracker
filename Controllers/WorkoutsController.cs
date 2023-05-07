@@ -11,6 +11,7 @@ using FitnessTracker.Models;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Identity;
 using Newtonsoft.Json;
+using Microsoft.AspNetCore.Authorization;
 
 namespace FitnessTracker.Controllers
 {
@@ -28,6 +29,7 @@ namespace FitnessTracker.Controllers
         }
 
         // GET: Workouts
+        [Authorize]
         public async Task<IActionResult> Index()
         {
             var currentUserId = _userManager.GetUserId(this.User);
@@ -40,6 +42,7 @@ namespace FitnessTracker.Controllers
         }
 
         // GET: Workouts/Details/5
+        [Authorize]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null || _context.Workouts == null)
@@ -59,6 +62,7 @@ namespace FitnessTracker.Controllers
         }
 
         // GET: Workouts/Create
+        [Authorize]
         public IActionResult Create()
         {
             var user = _userManager.GetUserAsync(User).Result;
@@ -73,10 +77,12 @@ namespace FitnessTracker.Controllers
         // POST: Workouts/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Name,Type,Description,Date,Duration,CaloriesBurned,FitnessUserId,Vitals")] WorkoutsModel model)
         {
+            var currentUserId = _userManager.GetUserId(this.User);
             if (ModelState.IsValid)
             {
                 // Create new workout object from view model data
@@ -88,7 +94,7 @@ namespace FitnessTracker.Controllers
                     Date = model.Date,
                     Duration = model.Duration,
                     CaloriesBurned = model.CaloriesBurned,
-                    FitnessUserId = model.FitnessUserId
+                    FitnessUserId = currentUserId,
                 };
 
                 // Save workout to database
@@ -105,7 +111,7 @@ namespace FitnessTracker.Controllers
                         DiastolicBP = model.Vitals.DiastolicBP,
                         SystolicBP = model.Vitals.SystolicBP,
                         HeartRate = model.Vitals.HeartRate,
-                        FitnessUserId = model.Vitals.FitnessUserId,
+                        FitnessUserId = currentUserId,
                         Date = model.Vitals.Date,
                     };
 
@@ -164,6 +170,7 @@ namespace FitnessTracker.Controllers
         //}
 
         // GET: Workouts/Edit/5
+        [Authorize]
         public async Task<IActionResult> Edit(int? id)
         {
             var user = _userManager.GetUserAsync(User).Result;
@@ -175,6 +182,7 @@ namespace FitnessTracker.Controllers
 
             var workoutsModel = await _context.Workouts
                                     .Include(w => w.Vitals)
+                                    .Where(w => w.FitnessUserId == user.Id)
                                     .FirstOrDefaultAsync(m => m.Id == id);
             // workoutsModel.Vitals = await _context.Vitals.FindAsync(workoutsModel.VitalsId).Result;
             // // Pass the vitals data to the view
@@ -204,6 +212,7 @@ namespace FitnessTracker.Controllers
         // POST: Workouts/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Type,CustomType,Description,Date,Duration,CaloriesBurned,FitnessUserId,VitalsId,Vitals")] WorkoutsModel workoutsModel)
@@ -314,6 +323,7 @@ namespace FitnessTracker.Controllers
         // }
 
         // GET: Workouts/Delete/5
+        [Authorize]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null || _context.Workouts == null)
@@ -332,6 +342,7 @@ namespace FitnessTracker.Controllers
         }
 
         // POST: Workouts/Delete/5
+        [Authorize]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
