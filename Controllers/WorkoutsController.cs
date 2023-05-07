@@ -18,11 +18,13 @@ namespace FitnessTracker.Controllers
     {
         private readonly ApplicationDbContext _context;
         private readonly UserManager<FitnessUser> _userManager;
+        private readonly WorkoutsSearchAPIController _workoutsSearchAPI;
 
-        public WorkoutsController(ApplicationDbContext context, UserManager<FitnessUser> userManager)
+        public WorkoutsController(ApplicationDbContext context, UserManager<FitnessUser> userManager, WorkoutsSearchAPIController workoutsSearchAPI)
         {
             _context = context;
             this._userManager = userManager;
+            this._workoutsSearchAPI = workoutsSearchAPI;
         }
 
         // GET: Workouts

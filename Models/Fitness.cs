@@ -37,14 +37,14 @@ namespace FitnessTracker.Models
     //    public virtual Workout Workout { get; set; }
     //}
 
-    public class VitalMetrics
-    {
-        public int Id { get; set; }
-        public double Height { get; set; }
-        public double Weight { get; set; }
-        public double? BodyFatPercentage { get; set; } // Optional vital health data
-        public virtual FitnessUser User { get; set; }
-    }
+    // public class VitalMetrics
+    // {
+    //     public int Id { get; set; }
+    //     public double Height { get; set; }
+    //     public double Weight { get; set; }
+    //     public double? BodyFatPercentage { get; set; } // Optional vital health data
+    //     public virtual FitnessUser User { get; set; }
+    // }
 
 }
 

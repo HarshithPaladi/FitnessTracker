@@ -72,284 +72,49 @@ body {
     background-color: #0062cc;
     border-color: #005cbf;
 }
-
-*/
-/* Light theme */
-/*body {
-    background-color: #f5f5f5;
-    color: #333;
-}*/
-
-/* Dark theme */
-/*body.dark {
-        background-color: #333;
-        color: #f5f5f5;
-    }
-
-/* Default styles for light mode
-html {
-    font-size: 14px;
+#search-form {
+    display: flex;
+    justify-content: center;
+    margin: 1rem 0;
 }
 
-@media (min-width: 768px) {
-    html {
-        font-size: 16px;
-    }
-}
-
-html {
-    position: relative;
-    min-height: 100%;
-}
-
-body {
-    margin-bottom: 60px;
-    background-color: #f5f5f5; /* Add default background color */
-color: #333;
-/* Add default font color */
-}
-
-.collapse:not(.show):not(#vitalsCollapse) {
-    display: none;
-}
-
-.card {
-    border: none;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    transition: box-shadow 0.3s ease-in-out;
-    background-color: #fff;
-    /* Add default background color */
-    color: #333;
-    /* Add default font color */
-}
-
-.card:hover {
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-}
-
-.card-img-top {
-    height: 200px;
-    object-fit: cover;
-}
-
-.card-title {
+#search-input {
+    padding: 0.5rem;
     font-size: 1.2rem;
-    font-weight: bold;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin-right: 0.5rem;
+    flex: 1;
 }
 
-.card-text {
-    font-size: 0.9rem;
-}
-
-.btn-primary {
+#search-button {
+    padding: 0.5rem 1rem;
+    font-size: 1.2rem;
     background-color: #007bff;
-    border-color: #007bff;
-}
-
-.btn-primary:hover {
-    background-color: #0069d9;
-    border-color: #0062cc;
-}
-
-.btn-primary:focus,
-.btn-primary.focus {
-    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.5);
-}
-
-.btn-primary.disabled,
-.btn-primary:disabled {
-    background-color: #007bff;
-    border-color: #007bff;
-}
-
-.btn-primary:not(:disabled):not(.disabled):active,
-.btn-primary:not(:disabled):not(.disabled).active,
-.show>.btn-primary.dropdown-toggle {
-    background-color: #0062cc;
-    border-color: #005cbf;
-}
-
-/* Dark mode styles */
-body.dark {
-    background-color: #333;
-    color: #f5f5f5;
-}
-
-make table comptatible with dark mode table.dark {
-    background-color: #444;
-    /* Add dark background color */
-    color: #f5f5f5;
-    /* Add dark font color */
-}
-
-table.dark th {
     color: #fff;
-    /* Add font color for table header in dark mode */
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
 }
 
-table.dark td {
-    color: #ccc;
-    /* Add font color for table cells in dark mode */
+#search-results {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
 }
 
-table.dark tr:nth-child(even) {
-    background-color: #555;
-    /* Add even table row striping in dark mode */
+.workout {
+    background-color: #fff;
+    padding: 1rem;
+    border-radius: 4px;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
 }
 
-table.dark tr:hover {
-    background-color: #666;
-    /* Add hover effect for table rows in dark mode */
+.workout h2 {
+    margin-top: 0;
+    font-size: 1.5rem;
 }
 
-table.dark thead th {
-    border-color: #fff;
-    /* Add border color for table header in dark mode */
+.workout p {
+    margin: 0.5rem 0;
 }
-
-table.dark tbody td {
-    border-color: #555;
-    /* Add border color for table cells in dark mode */
-}
-
-table.dark .table-active,
-table.dark .table-active>th,
-table.dark .table-active>td {
-    background-color: #666;
-    /* Add active table row in dark mode */
-}
-
-table.dark .table-hover>tbody>tr:hover {
-    background-color: #777;
-    /* Add hover effect for table rows in dark mode */
-}
-
-table.dark .table-hover>tbody>tr:hover>td,
-table.dark .table-hover>tbody>tr:hover>th {
-    background-color: #777;
-    /* Add hover effect for table cells in dark mode */
-}
-
-table.dark .table-dark,
-table.dark .table-dark>th,
-table.dark .table-dark>td {
-    background-color: #333;
-    /* Add dark table in dark mode */
-}
-
-table.dark .table-bordered {
-    border-color: #555;
-    /* Add border color for table in dark mode */
-}
-
-table.dark .table-bordered>th,
-table.dark .table-bordered>td {
-    border-color: #555;
-    /* Add border color for table cells in dark mode */
-}
-
-table.dark .table-striped tbody tr:nth-child(odd) {
-    background-color: #555;
-    /* Add odd table row striping in dark mode */
-}
-
-table.dark .table-hover tbody tr:hover {
-    background-color: #666;
-    /* Add hover effect for table rows in dark mode */
-}
-
-table.dark .table-hover tbody tr:hover td,
-table. .card.dark {
-    background-color: #444;
-    /* Add dark background color */
-    color: #f5f5f5;
-    /* Add dark font color */
-}
-
-.card.dark:hover {
-    box-shadow: 0 4px 8px rgba(255, 255, 255, 0.3);
-    /* Add hover effect for dark mode */
-}
-
-.card.dark .card-title {
-    color: #fff;
-    /* Add font color for card title in dark mode */
-}
-
-.card.dark .card-text {
-    color: #ccc;
-    /* Add font color for card text in dark mode */
-}
-
-.btn-primary.dark {
-    background-color: #005cbf;
-    /* Add button background color in dark mode */
-    border-color: #005cbf;
-    color: #fff;
-    /* Add button font color in dark mode */
-}
-
-.btn-primary.dark:hover {
-    background-color: #0062cc;
-    border-color: #005cbf;
-}
-
-.btn-primary.dark:focus,
-.btn-primary.dark.focus {
-    box-shadow: 0 0 0 0.2rem rgba(0, 92, 191, 0.5);
-}
-
-.btn-primary.dark.disabled,
-.btn-primary.dark:disabled {
-    background-color: #444;
-    /* Add button background color in dark mode */
-    border-color: #444;
-    color: #888;
-
-    /* Add button font color in dark mode */
-    /* Light theme */
-    body {
-        background-color: #f5f5f5;
-        color: #333;
-    }
-
-    /* Dark theme */
-    body.dark {
-        background-color: #333;
-        color: #f5f5f5;
-    }
-
-    /* Add changes for buttons in dark mode */
-    .btn-primary.dark {
-        background-color: #007bff;
-        border-color: #007bff;
-        color: #f5f5f5;
-    }
-
-    .btn-primary.dark:hover {
-        background-color: #0069d9;
-        border-color: #0062cc;
-        color: #f5f5f5;
-    }
-
-    .btn-primary.dark:focus,
-    .btn-primary.dark.focus {
-        box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.5);
-    }
-
-    .btn-primary.dark.disabled,
-    .btn-primary.dark:disabled {
-        background-color: #444;
-        border-color: #444;
-        color: #888;
-    }
-
-    .btn-primary.dark:not(:disabled):not(.disabled):active,
-    .btn-primary.dark:not(:disabled):not(.disabled).active,
-    .show>.btn-primary.dark.dropdown-toggle {
-        background-color: #0062cc;
-        border-color: #005cbf;
-        color: #f5f5f5;
-    }
-
-    */

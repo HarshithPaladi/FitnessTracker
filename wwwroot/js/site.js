@@ -10,6 +10,72 @@ $('#Type').on('change', function () {
         $('#custom-type').addClass('d-none');
     }
 });
+function displayResults(workouts) {
+    const dropdownResults = document.querySelector('.autocomplete-result-list');
+    dropdownResults.innerHTML = '';
+    if (workouts.length === 0) {
+        dropdownResults.style.display = 'none';
+        return;
+    }
+    dropdownResults.style.display = 'block';
+    workouts.forEach(workout => {
+        const workoutName = workout.name;
+        const workoutId = workout.id;
+        dropdownResults.innerHTML += `<li><a href="/Workouts/Details/${workoutId}">${workoutName}</a></li>`;
+    });
+}
+const form = document.querySelector('#search-form');
+const input = document.querySelector('#search-input');
+
+form.addEventListener('submit', async (event) => {
+    event.preventDefault();
+
+    const searchTerm = input.value;
+
+    try {
+        const response = await fetch(`/api/WorkoutsSearchAPI/Search/${searchTerm}`);
+        const workouts = await response.json();
+
+        // Display the search results
+        // ...
+    } catch (error) {
+        console.error(error);
+    }
+});
+$('form').on('submit', function (e) {
+    e.preventDefault(); // prevent default form submission behavior
+    // submit form data using AJAX instead
+});
+
+const renderResults = (workouts) => {
+    const resultsContainer = document.querySelector('#search-results');
+    resultsContainer.innerHTML = '';
+
+    if (workouts.length === 0) {
+        resultsContainer.innerHTML = '<p>No results found.</p>';
+        return;
+    }
+
+    workouts.forEach((workout) => {
+        const workoutElement = document.createElement('div');
+        workoutElement.classList.add('workout');
+
+        const nameElement = document.createElement('h2');
+        nameElement.textContent = workout.name;
+        workoutElement.appendChild(nameElement);
+
+        const typeElement = document.createElement('p');
+        typeElement.textContent = workout.type;
+        workoutElement.appendChild(typeElement);
+
+        const descriptionElement = document.createElement('p');
+        descriptionElement.textContent = workout.description;
+        workoutElement.appendChild(descriptionElement);
+
+        resultsContainer.appendChild(workoutElement);
+    });
+};
+
 // [Todo] - Refactor this code to toggle the dark theme
 // const toggleBtn = document.getElementById('theme-toggle');
 // const body = document.querySelector('body');

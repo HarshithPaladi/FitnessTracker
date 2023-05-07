@@ -11,16 +11,19 @@
 }
 @if (TempData["ErrorMessage"] == null)
 {
-<div class="container">
-    <h1>Vitals</h1>
-    <div class="row mb-3">
-        <div class="col-12">
-            <a asp-action="Create" class="btn btn-success">
-                <i class="fas fa-plus"></i> Add Vitals
-            </a>
+    <div class="container">
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <h1>Vitals</h1>
+            </div>
+            <div class="col-md-6 d-flex justify-content-end align-items-center">
+                <a asp-action="Create" class="btn btn-success">
+                    <i class="fas fa-plus"></i> Create Vital
+                </a>
+            </div>
         </div>
-    </div>
-    @* <div class="row">
+        <hr>
+        @* <div class="row">
     <div class="col-md-12">
     <form asp-action="Index" method="get">
     <div class="form-row">
@@ -57,61 +60,61 @@
     </div>
     </div> *@
 
-    <table class="table table-striped">
-        <thead>
-            <tr>
-                <th>Date</th>
-                <th>Time</th>
-                <th>Heart Rate</th>
-                <th>Systolic BP</th>
-                <th>Diastolic BP</th>
-                <th>Oxygen Saturation</th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model)
-            {
+        <table class="table table-striped">
+            <thead>
                 <tr>
-                    <td>@item.Date.ToShortDateString()</td>
-                    <td>@item.Date.ToShortTimeString()</td>
-                    <td>@item.HeartRate</td>
-                    <td>@item.SystolicBP</td>
-                    <td>@item.DiastolicBP</td>
-                    <td>@item.OxygenSaturation</td>
-                    <td>
-                        @* Removed Edit button due to Vitals should not be edited once entered *@
-                        @* <a asp-action="Edit" asp-route-id="@item.VitalsId" class="btn btn-sm btn-primary">
-                    <i class="bi bi-pencil-square"></i></a> *@
-                        @if (item.WorkoutsId == null)
-                        {
-                            <a asp-action="Delete" asp-route-id="@item.VitalsId" class="btn btn-sm btn-danger">
-                                <i class="bi bi-trash"></i></a>
-                        }
-                        else
-                        {
-                            // Add a tooltip to explain why the delete button is disabled
-                            <a asp-action="Delete" asp-route-id="@item.VitalsId" class="btn btn-sm btn-danger disabled"
-                                title="Vitals cannot be deleted once associated with a workout" role="button">
-                                <i class="bi bi-trash"></i>
-                            </a>
-
-
-                        }
-                    </td>
+                    <th>Date</th>
+                    <th>Time</th>
+                    <th>Heart Rate</th>
+                    <th>Systolic BP</th>
+                    <th>Diastolic BP</th>
+                    <th>Oxygen Saturation</th>
+                    <th></th>
                 </tr>
-            }
-        </tbody>
-    </table>
-</div>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@item.Date.ToShortDateString()</td>
+                        <td>@item.Date.ToShortTimeString()</td>
+                        <td>@item.HeartRate</td>
+                        <td>@item.SystolicBP</td>
+                        <td>@item.DiastolicBP</td>
+                        <td>@item.OxygenSaturation</td>
+                        <td>
+                            @* Removed Edit button due to Vitals should not be edited once entered *@
+                            @* <a asp-action="Edit" asp-route-id="@item.VitalsId" class="btn btn-sm btn-primary">
+                    <i class="bi bi-pencil-square"></i></a> *@
+                            @if (item.WorkoutsId == null)
+                            {
+                                <a asp-action="Delete" asp-route-id="@item.VitalsId" class="btn btn-sm btn-danger">
+                                    <i class="bi bi-trash"></i></a>
+                            }
+                            else
+                            {
+                                // Add a tooltip to explain why the delete button is disabled
+                                <a asp-action="Delete" asp-route-id="@item.VitalsId" class="btn btn-sm btn-danger disabled"
+                                    title="Vitals cannot be deleted once associated with a workout" role="button">
+                                    <i class="bi bi-trash"></i>
+                                </a>
+
+
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
 }
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");
-    <script>
-        $(function () {
-            $('[data-toggle="tooltip"]').tooltip()
-        })
-    </script>
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+        <script>
+            $(function () {
+                $('[data-toggle="tooltip"]').tooltip()
+            })
+        </script>
     }
 }
-```

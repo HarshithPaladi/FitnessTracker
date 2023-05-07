@@ -1,26 +1,286 @@
 ﻿@model IEnumerable<FitnessTracker.Models.WorkoutsModel>
 
-    <h1>Workouts</h1>
-    <hr />
-    <div class="row mb-3">
-        <div class="col-12">
-            <a asp-action="Create" class="btn btn-success">
-                <i class="fas fa-plus"></i> Create Workout
-            </a>
-        </div>
+<div class="row mb-3">
+    <div class="col-md-6">
+        <h1>Workouts</h1>
     </div>
+    <div class="col-md-6 d-flex justify-content-end align-items-center">
+        <a asp-action="Create" class="btn btn-success">
+            <i class="fas fa-plus"></i> Create Workout
+        </a>
+    </div>
+</div>
+<hr />
+
+@* <section>
+<div class="container p-5 autocomplete" id="autocomplete">
+<form method="get">
+<input type="text"
+class="form-control form-control-lg d-inline rounded-start-0 shadow autocomplete-input"
+placeholder="Search for workouts...">
+<button type="submit" class="btn btn-primary btn-lg d-flex rounded-end-0 shadow justify-content-center"> <i
+class="bi bi-search"></i> Search </button>
+</form>
+<ul class="autocomplete-result-list"></ul>
+<sub>Please type at least 3 characters for auto-suggestions.</sub>
+</div>
+</section>
+
+<script type="text/javascript">
+new Autocomplete('#autocomplete', {
+
+search: input => {
+const url = `/api/WorkoutsSearchAPI/Search${input}`;
+return new Promise(resolve => {
+if (input.length < 1) {
+return resolve([]);
+}
+fetch(url)
+.then(response => response.json())
+.then(data => {
+resolve(data.map(workout => ({
+label: `<div><a href="/Workouts/Details/${workout.id}">${workout.name}</a> - ${workout.type} -
+${workout.description}</div>`,
+value: workout.id
+})));
+});
+});
+},
+
+autoSelect: false,
+
+onSubmit: result => {
+window.location = `/Workouts/Details/${result}`;
+},
+
+onShow: (input, results, selectedIndex) => {
+const resultItems = document.querySelectorAll('.autocomplete-result-item');
+resultItems.forEach(item => {
+item.innerHTML = results[selectedIndex].label;
+});
+}
+});
+</script> *@
+
+@* <!-- Search Bar with Dropdown using trevoreyre/autocomplete-js -->
+<section>
+<div class="container p-5 autocomplete" id="autocomplete">
+<form class="search">
+<input type="text" id="search-input"
+class="form-control form-control-lg d-inline rounded-start-0 shadow autocomplete-input"
+placeholder="Search Workouts...">
+</form>
+<ul class="autocomplete-result-list"></ul>
+</div>
+</section>
+
+<script>
+const searchInput = document.querySelector('#search-input');
+const resultList = document.querySelector('.autocomplete-result-list');
+
+new Autocomplete('#autocomplete', {
+search: input => {
+const url = `/api/WorkoutsSearchAPI/Search/${input}`;
+return new Promise(resolve => {
+fetch(url)
+.then(response => response.json())
+.then(data => {
+const workoutLinks = data.map(workout => `<li><a href="/Workouts/Details/${workout.id}">${workout.name}</a></li>`);
+resultList.innerHTML = workoutLinks.join('');
+resolve(data);
+});
+});
+},
+debounceTime: 300
+});
+</script> *@
+
+
+
+
+@* <script>
+$(document).ready(function () {
+var searchInput = $('#search-input');
+var dropdownResults = $('#dropdown-results');
+var data = [];
+
+// Get initial data
+$.ajax({
+url: '/api/WorkoutsSearchAPI/Search',
+type: 'GET',
+success: function (response) {
+$.each(response, function (i, workout) {
+data.push({ label: workout.name, value: workout.id });
+});
+},
+error: function (xhr) {
+console.log(xhr.responseText);
+}
+});
+
+// Autocomplete function
+var options = {
+data: data,
+placeholder: "Search...",
+dropdownMenuContainer: "#dropdown-results",
+getValue: "label",
+list: {
+maxNumberOfElements: 10,
+showAnimation: {
+type: "fade",
+time: 300
+},
+hideAnimation: {
+type: "slide",
+time: 300
+},
+onClickEvent: function () {
+var selectedItemValue = $("#search-input").getSelectedItemData().value;
+window.location.href = "/Workouts/Details/" + selectedItemValue;
+}
+}
+};
+searchInput.autocomplete(options);
+});
+</script> *@
+
+
+@* <!-- Search Bar with Dropdown -->
+<form id="search-form">
+<div class="dropdown">
+<button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown"
+aria-haspopup="true" aria-expanded="false">
+Select a Workout
+</button>
+<div class="dropdown-menu" aria-labelledby="dropdownMenuButton" style="max-height: 200px; overflow-y: auto;">
+<input class="form-control" type="text" id="search-input" placeholder="Search...">
+<div id="dropdown-results"></div>
+</div>
+</div>
+<button type="submit" id="search-button"><i class="bi bi-search"></i></button>
+</form>
+<script>
+$(document).ready(function () {
+var searchInput = $('#search-input');
+var dropdownResults = $('#dropdown-results');
+
+// Search function
+function search() {
+var searchTerm = searchInput.val();
+$.ajax({
+url: '/api/WorkoutsSearchAPI/Search',
+type: 'GET',
+data: { searchTerm: searchTerm },
+success: function (data) {
+dropdownResults.empty();
+$.each(data, function (i, workout) {
+dropdownResults.append(`<a class="dropdown-item" href="/Workouts/Details/${workout.id}">${workout.name}</a>`);
+});
+},
+error: function (xhr) {
+console.log(xhr.responseText);
+}
+});
+}
+
+// Debounce function to delay search until typing is finished
+function debounce(fn, delay) {
+var timer = null;
+return function () {
+var context = this, args = arguments;
+clearTimeout(timer);
+timer = setTimeout(function () {
+fn.apply(context, args);
+}, delay);
+};
+}
+
+// Bind event listeners
+searchInput.on('input', debounce(search, 300));
+$('#search-form').submit(function (event) {
+event.preventDefault();
+search();
+});
+});
+</script> *@
+
+
+
 <!-- Search Bar * -->
-<div class="input-group mb-3">
-    <input type="text" class="form-control" placeholder="Search Workouts" id="workoutSearchInput">
-    <div class="input-group-append">
-        <button class="btn btn-outline-secondary" type="button" id="workoutSearchButton">
-            <i class="bi bi-search"></i>
-        </button>
-    </div>
-</div>
-<div class="dropdown" id="workoutDropdown">
-    <div class="dropdown-menu" id="workoutDropdownMenu"></div>
-</div>
+<form id="search-form">
+    <input type="text" id="search-input" placeholder="Search Workouts...">
+    <button type="submit" id="search-button"><i class="bi bi-search"></i></button>
+</form>
+
+<div id="search-results"></div>
+<script>
+    const form = document.getElementById('search-form');
+    const input = document.getElementById('search-input');
+    const resultsContainer = document.getElementById('search-results');
+
+    form.addEventListener('submit', async (event) => {
+        event.preventDefault(); // prevent the form from reloading the page
+
+        const searchTerm = input.value.trim();
+
+        if (!searchTerm) {
+            return; // do nothing if the search term is empty
+        }
+
+        const response = await fetch(`/api/WorkoutsSearchAPI/Search/${searchTerm}`);
+        const results = await response.json();
+
+    @* resultsContainer.innerHTML = '';
+
+            if (results.length === 0) {
+            resultsContainer.innerHTML = `<p class="text-muted mt-3">No results found.</p>`;
+            } else {
+            const cardDeck = document.createElement('div');
+            cardDeck.className = 'card-deck mt-3';
+            results.forEach((result) => {
+            const card = document.createElement('div');
+            card.className = 'card';
+            const cardBody = document.createElement('div');
+            cardBody.className = 'card-body';
+            const cardTitle = document.createElement('h5');
+            cardTitle.className = 'card-title';
+            cardTitle.innerHTML = `<a href="/Workouts/Details/${result.id}" class="text-decoration-none">${result.name}</a>`;
+            const cardSubtitle = document.createElement('h6');
+            cardSubtitle.className = 'card-subtitle mb-2 text-muted';
+            cardSubtitle.textContent = result.type;
+            const cardText = document.createElement('p');
+            cardText.className = 'card-text';
+            cardText.textContent = result.description;
+            cardBody.appendChild(cardTitle);
+            cardBody.appendChild(cardSubtitle);
+            cardBody.appendChild(cardText);
+            card.appendChild(cardBody);
+            cardDeck.appendChild(card);
+            });
+            resultsContainer.appendChild(cardDeck);
+            } *@
+            // clear the previous search results
+            resultsContainer.innerHTML = '';
+
+        if (results.length === 0) {
+            resultsContainer.textContent = 'No results found.';
+            const p = document.createElement('p');
+            p.textContent = 'No results found.';
+            resultsContainer.appendChild(p);
+        } else {
+            // create a list of search results
+            const ul = document.createElement('ul');
+            results.forEach((result) => {
+                const li = document.createElement('li');
+                li.textContent = `${result.name} (${result.type}) - ${result.description}`;
+                li.innerHTML = `<a href="/Workouts/Details/${result.id}">${result.name} (${result.type}) - ${result.description}</a>`;
+                ul.appendChild(li);
+            });
+            resultsContainer.appendChild(ul);
+        }
+    });
+
+</script>
 
 <!-- Workouts grid -->
 <div class="container">
@@ -35,9 +295,12 @@
                         <p class="card-text">@workout.Description</p>
                     </div>
                     <div class="card-footer">
-                        <a href="@Url.Action("Details", "Workouts", new { id = workout.Id })" class="btn btn-primary btn-sm"><i class="bi bi-journals"></i></a>
-                        <a href="@Url.Action("Edit", "Workouts", new { id = workout.Id })" class="btn btn-secondary btn-sm"><i class="bi bi-pencil-square"></i></a>
-                        <a href="@Url.Action("Delete", "Workouts", new { id = workout.Id })" class="btn btn-danger btn-sm"><i class="bi bi-trash"></i></a>
+                        <a href="@Url.Action("Details", "Workouts", new { id = workout.Id })"
+                            class="btn btn-primary btn-sm"><i class="bi bi-journals"></i></a>
+                        <a href="@Url.Action("Edit", "Workouts", new { id = workout.Id })"
+                            class="btn btn-secondary btn-sm"><i class="bi bi-pencil-square"></i></a>
+                        <a href="@Url.Action("Delete", "Workouts", new { id = workout.Id })"
+                            class="btn btn-danger btn-sm"><i class="bi bi-trash"></i></a>
 
                     </div>
                 </div>
@@ -47,16 +310,17 @@
 
     @* <!-- Search bar -->
     <div class="row mt-4">
-        <div class="col-md-12">
-            <div class="input-group">
-                <input type="text" class="form-control" placeholder="Search workouts">
-                <div class="input-group-append">
-                    <button type="submit" class="btn btn-primary"
-                    onclick="location.href='@Url.Action("Index", "Workouts")?searchString='+document.getElementById('searchString').value">Search</button>
+    <div class="col-md-12">
+    <div class="input-group">
+    <input type="text" class="form-control" placeholder="Search workouts">
+    <div class="input-group-append">
+    <button type="submit" class="btn btn-primary"
+    onclick="location.href='@Url.Action("Index",
+    "Workouts")?searchString='+document.getElementById('searchString').value">Search</button>
 
-                </div>
-            </div>
-        </div>
+    </div>
+    </div>
+    </div>
     </div> *@
 
     <!-- Pagination -->
@@ -84,5 +348,5 @@
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
         <script src="~/js/site.js"></script>
     }
-    
+
 }

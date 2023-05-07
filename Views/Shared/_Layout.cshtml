@@ -1,4 +1,10 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.AspNetCore.Html;
+
+@{
+    var autoCompleteStyleLink = new HtmlString("<link rel=\"stylesheet\" href=\"https://unpkg.com/@trevoreyre/autocomplete-js@5.0.0/dist/style.css\" />");
+    var autoCompleteScriptLink = new HtmlString("<script src=\"https://code.jquery.com/jquery-3.6.0.min.js\"></script><script src=\"https://unpkg.com/@trevoreyre/autocomplete-js\"></script>");
+}
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -8,12 +14,19 @@
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/FitnessTracker.styles.css" asp-append-version="true" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <!-- Include the Autocomplete library CSS -->
+    @autoCompleteStyleLink
+
     <script src="https://cdn.jsdelivr.net/npm/fuse.js/dist/fuse.min.js"></script>
+    <!-- Include jQuery and the Autocomplete library JavaScript -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    @autoCompleteScriptLink
     <!-- Required JavaScript -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"
             integrity="sha384-8H1EJOT9lAtGh0sCwkiQ5C1K+IyxfO2zFyB1S5m/q6qb/CwTKC+1LJb8n4+P4JGQ"
             crossorigin="anonymous"></script>
     @* <script src="https://cdn.jsdelivr.net/npm/darkreader/darkreader.min.js"></script> *@
+
     @* <script>
         DarkReader.enable({
             brightness: 100,

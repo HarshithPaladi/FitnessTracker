@@ -1,0 +1,37 @@
+<section>
+<div class="container p-5 autocomplete" id="autocomplete">
+<form class="search" action="result" method="get">
+<input type="text" name="search" class="form-control form-control-lg d-inline rounded-start-0 shadow autocomplete-input" placeholder="Search by Protein name or ID">
+<button type="submit" class="btn btn-primary btn-lg d-flex rounded-end-0 shadow justify-content-center"> <i class="bi bi-search"></i> Search </button>
+</form>
+<ul class="autocomplete-result-list"></ul>
+<sub>Please type atleast 3 characters for auto-suggestions. You can search by protein id, uniprot id or even protein name but only the uniprot id is displayed for selection.
+If uncertain of selection, click search without selecting any options to get more info about the options.</sub>
+</div>
+</section>
+<script src="https://unpkg.com/@trevoreyre/autocomplete-js" type="205974946608d56a9e9633d6-text/javascript"></script>
+<script type="205974946608d56a9e9633d6-text/javascript">
+        new Autocomplete('#autocomplete', {
+
+            search: input => {
+                console.log(input)
+                const url = `search?search=${input}`
+                return new Promise(resolve => {
+                    if (input.length < 3) {
+                        return resolve([])
+                    }
+                    fetch(url)
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log(data)
+                        resolve(data.id)
+                    })
+                })
+            },
+            autoSelect:false,
+            onSubmit: result => { window.location = "result?search="+(result) }
+
+        })
+    </script>
+
+<section>

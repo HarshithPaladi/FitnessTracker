@@ -35,29 +35,45 @@
                 <input type="text" class="form-control" id="CustomType" name="CustomType" />
             </div>
             <div class="form-group">
-                <label asp-for="Description" class="control-label"></label>
-                <input asp-for="Description" class="form-control" />
-                <span asp-validation-for="Description" class="text-danger"></span>
-            </div>
-            <div class="form-group">
                 <label asp-for="Date" class="control-label"></label>
                 <input asp-for="Date" class="form-control" />
                 <span asp-validation-for="Date" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Duration" class="control-label"></label>
-                <input asp-for="Duration" class="form-control" />
+                <label>Workout Duration</label>
+                <div class="row">
+                    <div class="col-4">
+                        <input type="number" min="0" max="23" class="form-control" placeholder="Hours" id="hours" />
+                    </div>
+                    <div class="col-4">
+                        <input type="number" min="0" max="59" class="form-control" placeholder="Minutes" id="minutes" />
+                    </div>
+                    <div class="col-4">
+                        <input type="number" min="0" max="59" class="form-control" placeholder="Seconds" id="seconds" />
+                    </div>
+                </div>
                 <span asp-validation-for="Duration" class="text-danger"></span>
             </div>
+            @* <div class="form-group">
+            <label asp-for="Duration" class="control-label"></label>
+            <input asp-for="Duration" class="form-control" />
+            <span asp-validation-for="Duration" class="text-danger"></span>
+            </div> *@
             <div class="form-group">
                 <label asp-for="CaloriesBurned" class="control-label"></label>
                 <input asp-for="CaloriesBurned" class="form-control" />
                 <span asp-validation-for="CaloriesBurned" class="text-danger"></span>
             </div>
+            <div class="form-group">
+                <label asp-for="Description" class="control-label"></label>
+                <textarea asp-for="Description" class="form-control"></textarea>
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
             <h4>Vitals Model</h4>
             @if (Model.Vitals != null)
             {
-                <input type="hidden" asp-for="Vitals" value="@Newtonsoft.Json.JsonConvert.SerializeObject(Model.Vitals)" />
+                @* <input type="hidden" asp-for="Vitals" value="@Newtonsoft.Json.JsonConvert.SerializeObject(Model.Vitals)"
+            /> *@
                 <div class="form-group">
                     <input class="visually-hidden" asp-for="VitalsId" class="form-control" />
                     <span asp-validation-for="VitalsId" class="text-danger"></span>
@@ -112,5 +128,37 @@
 @section Scripts {
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
+        <script>
+            $(function () {
+                $('form').submit(function () {
+                    var hours = parseInt($('#hours').val()) || 0;
+                    var minutes = parseInt($('#minutes').val()) || 0;
+                    var seconds = parseInt($('#seconds').val()) || 0;
+                    var duration = hours * 3600 + minutes * 60 + seconds;
+                    $('#Duration').val(duration);
+                });
+                $(function () {
+                    var duration = $('#Duration').val();
+                    var time = secondsToHms(duration);
+                    var timeArray = time.split(',');
+                    $('#hours').val(timeArray[0]);
+                    $('#minutes').val(timeArray[1]);
+                    $('#seconds').val(timeArray[2]);
+                });
+                function secondsToHms(d) {
+                    d = Number(d);
+                    var h = Math.floor(d / 3600);
+                    var m = Math.floor(d % 3600 / 60);
+                    var s = Math.floor(d % 3600 % 60);
+
+                    var hDisplay = h > 0 ? h + (h == 1 ? " hour, " : " hours, ") : "";
+                    var mDisplay = m > 0 ? m + (m == 1 ? " minute, " : " minutes, ") : "";
+                    var sDisplay = s > 0 ? s + (s == 1 ? " second" : " seconds") : "";
+                    return hDisplay + mDisplay + sDisplay;
+                }
+            });
+
+
+        </script>
     }
 }

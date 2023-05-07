@@ -1,0 +1,36 @@
+﻿@model IEnumerable<FitnessTracker.Models.WorkoutsModel>
+
+<h2>Search Workouts</h2>
+
+@using (Html.BeginForm())
+{
+    <p>
+        Search:
+        @Html.TextBox("searchTerm")
+        <input type="submit" value="Search" />
+    </p>
+}
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Type</th>
+            <th>Description</th>
+            <th>Duration (mins)</th>
+            <th>Calories Burned</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var workout in Model)
+        {
+            <tr>
+                <td>@workout.Name</td>
+                <td>@workout.Type</td>
+                <td>@workout.Description</td>
+                <td>@workout.Duration</td>
+                <td>@workout.CaloriesBurned</td>
+            </tr>
+        }
+    </tbody>
+</table>
