@@ -26,6 +26,10 @@ namespace FitnessTracker.Controllers
             _context = context;
             this._userManager = userManager;
             this._workoutsSearchAPI = workoutsSearchAPI;
+            // Get the user you want to add a role to
+            var user = _userManager.FindByEmailAsync("test@example.com").Result;
+            // Add the role to the user
+            _userManager.AddToRoleAsync(user, "PremiumUser").Wait();
         }
 
         // GET: Workouts
@@ -226,7 +230,7 @@ namespace FitnessTracker.Controllers
             {
                 try
                 {
-                    
+
                     // retrieve the Vitals object from the database based on the VitalsId
                     var vitals = await _context.Vitals.FindAsync(workoutsModel.VitalsId);
 
@@ -369,6 +373,7 @@ namespace FitnessTracker.Controllers
         private bool WorkoutsModelExists(int id)
         {
             return (_context.Workouts?.Any(e => e.Id == id)).GetValueOrDefault();
+
         }
     }
 }

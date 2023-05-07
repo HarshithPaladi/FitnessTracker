@@ -1,0 +1,461 @@
+﻿@* @{
+}
+<!-- HTML -->
+<canvas id="vitalsChart"></canvas>
+
+<select id="vitalsSelect">
+    <option value="HeartRate">Heart Rate</option>
+    <option value="SystolicBP">Systolic BP</option>
+    <option value="DiastolicBP">Diastolic BP</option>
+    <option value="OxygenSaturation">Oxygen Saturation</option>
+</select>
+
+<!-- JavaScript -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    function generateChart() {
+        var vitalsData = @Html.Raw(Json.Serialize(Model));
+
+        var ctx = document.getElementById("vitalsChart").getContext("2d");
+
+        var chartData = {
+            labels: [],
+            datasets: [
+                {
+                    label: "",
+                    data: [],
+                    borderColor: "",
+                    fill: false
+                }
+            ]
+        };
+
+        var vitalsSelect = document.getElementById("vitalsSelect");
+        vitalsSelect.addEventListener("change", function () {
+            var selectedVital = this.value;
+            var label = "";
+            var borderColor = "";
+
+            switch (selectedVital) {
+                case "HeartRate":
+                    label = "Heart Rate";
+                    borderColor = "#3e95cd";
+                    chartData.datasets[0].data = vitalsData.map(function (item) { return item.HeartRate });
+                    break;
+                case "SystolicBP":
+                    label = "Systolic BP";
+                    borderColor = "#8e5ea2";
+                    chartData.datasets[0].data = vitalsData.map(function (item) { return item.SystolicBP });
+                    break;
+                case "DiastolicBP":
+                    label = "Diastolic BP";
+                    borderColor = "#3cba9f";
+                    chartData.datasets[0].data = vitalsData.map(function (item) { return item.DiastolicBP });
+                    break;
+                case "OxygenSaturation":
+                    label = "Oxygen Saturation";
+                    borderColor = "#e8c3b9";
+                    chartData.datasets[0].data = vitalsData.map(function (item) { return item.OxygenSaturation });
+                    break;
+            }
+
+            chartData.datasets[0].label = label;
+            chartData.datasets[0].borderColor = borderColor;
+
+            var dates = vitalsData.map(function (item) { return item.Date });
+            chartData.labels = dates;
+
+            var vitalsChart = new Chart(ctx, {
+                type: "line",
+                data: chartData,
+                options: {
+                    responsive: true,
+                    title: {
+                        display: true,
+                        text: "Vitals Chart"
+                    },
+                    scales: {
+                        xAxes: [{
+                            type: 'time',
+                            time: {
+                                unit: 'day',
+                                displayFormats: {
+                                    day: 'MMM D'
+                                }
+                            },
+                            distribution: 'linear',
+                            ticks: {
+                                source: 'data',
+                                autoSkip: true,
+                                maxTicksLimit: 30
+                            },
+                            scaleLabel: {
+                                display: true,
+                                labelString: 'Date'
+                            }
+                        }],
+                        yAxes: [{
+                            ticks: {
+                                beginAtZero: true,
+                                stepSize: 10,
+                                max: 200
+                            },
+                            scaleLabel: {
+                                display: true,
+                                labelString: 'Value'
+                            }
+                        }]
+                    }
+                }
+            });
+            // Update chart with data
+            vitalsChart.data = chartData;
+            vitalsChart.update();
+        }
+
+        }
+    // Get the dropdown element
+    var dropdown = document.getElementById("vitalSelect");
+
+    // Attach event listener to the dropdown element
+    dropdown.addEventListener("change", function () {
+        // Get the selected option
+        var selectedOption = dropdown.value;
+
+        // Generate chart for selected vital
+        generateChart(selectedOption);
+    });
+
+    // Generate chart for initial selected vital
+    generateChart(dropdown.value);
+</script>
+
+
+
+ *@
+
+// Create a chart for each vital type with options of last 1 day, 7 days, last 30 days
+// Create a dropdown to select the vital type
+// Create a dropdown to select the time period
+// Create a button to generate the chart
+// Create a button to download the chart
+// Create a button to print the chart
+
+@* <canvas id="vitalsChart"></canvas>
+
+<select id="vitalsSelect">
+    <option value="HeartRate">Heart Rate</option>
+    <option value="SystolicBP">Systolic BP</option>
+    <option value="DiastolicBP">Diastolic BP</option>
+    <option value="OxygenSaturation">Oxygen Saturation</option>
+</select>
+
+<select id="timePeriodSelect">
+    <option value="1">Last 1 Day</option>
+    <option value="7">Last 7 Days</option>
+    <option value="30">Last 30 Days</option>
+</select>
+
+<button id="generateChartButton">Generate Chart</button>
+<button id="downloadChartButton">Download Chart</button>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    function generateChart() {
+        var vitalsData = @Html.Raw(Json.Serialize(Model));
+
+        var ctx = document.getElementById("vitalsChart").getContext("2d");
+
+        var chartData = {
+            labels: [],
+            datasets: [
+                {
+                    label: "",
+                    data: [],
+                    borderColor: "",
+                    fill: false
+                }
+            ]
+        };
+
+        var vitalsSelect = document.getElementById("vitalsSelect");
+        vitalsSelect.addEventListener("change", function () {
+            var selectedVital = this.value;
+            var label = "";
+            var borderColor = "";
+
+            switch (selectedVital) {
+                case "HeartRate":
+                    label = "Heart Rate";
+                    borderColor = "#3e95cd";
+                    chartData.datasets[0].data = vitalsData.map(function (item) { return item.HeartRate });
+                    break;
+                case "SystolicBP":
+                    label = "Systolic BP";
+                    borderColor = "#8e5ea2";
+                    chartData.datasets[0].data = vitalsData.map(function (item) { return item.SystolicBP });
+                    break;
+                case "DiastolicBP":
+                    label = "Diastolic BP";
+                    borderColor = "#3cba9f";
+                    chartData.datasets[0].data = vitalsData.map(function (item) { return item.DiastolicBP });
+                    break;
+                case "OxygenSaturation":
+                    label = "Oxygen Saturation";
+                    borderColor = "#e8c3b9";
+                    chartData.datasets[0].data = vitalsData.map(function (item) { return item.OxygenSaturation });
+                    break;
+            }
+
+            chartData.datasets[0].label = label;
+            chartData.datasets[0].borderColor = borderColor;
+
+            var dates = vitalsData.map(function (item) { return item.Date });
+            chartData.labels = dates;
+
+            var vitalsChart = new Chart(ctx, {
+                type: "line",
+                data: chartData,
+                options: {
+                    responsive: true,
+                    title: {
+                        display: true,
+                        text: "Vitals Chart"
+                    },
+                    scales: {
+                        xAxes: [{
+                            type: 'time',
+                            time: {
+                                unit: 'day',
+                                displayFormats: {
+                                    day: 'MMM D'
+                                }
+                            },
+                            distribution: 'linear',
+                            ticks: {
+                                source: 'data',
+                                autoSkip: true,
+                                maxTicksLimit: 30
+                            },
+                            scaleLabel: {
+                                display: true,
+                                labelString: 'Date'
+                            }
+                        }],
+                        yAxes: [{
+                            ticks: {
+                                beginAtZero: true,
+                                stepSize: 10,
+                                max: 200
+                            },
+                            scaleLabel: {
+                                display: true,
+                                labelString: 'Value'
+                            }
+                        }]
+                    }
+                }
+            });
+
+            // Update chart with data
+
+            vitalsChart.data = chartData;
+            vitalsChart.update();
+        });
+
+        var timePeriodSelect = document.getElementById("timePeriodSelect");
+        timePeriodSelect.addEventListener("change", function () {
+            var selectedTimePeriod = this.value;
+            var label = "";
+            var borderColor = "";
+
+            switch (selectedTimePeriod) {
+                case "1":
+                    label = "Last 1 Day";
+                    break;
+                case "7":
+                    label = "Last 7 Days";
+                    break;
+                case "30":
+                    label = "Last 30 Days";
+                    break;
+            }
+
+            chartData.datasets[0].label = label;
+            chartData.datasets[0].borderColor = borderColor;
+
+            var dates = vitalsData.map(function (item) { return item.Date });
+            chartData.labels = dates;
+
+            var vitalsChart = new Chart(ctx, {
+                type: "line",
+                data: chartData,
+                options: {
+                    responsive: true,
+                    title: {
+                        display: true,
+                        text: "Vitals Chart"
+                    },
+                    scales: {
+                        xAxes: [{
+                            type: 'time',
+                            time: {
+                                unit: 'day',
+                                displayFormats: {
+                                    day: 'MMM D'
+                                }
+                            },
+                            distribution: 'linear',
+                            ticks: {
+                                source: 'data',
+                                autoSkip: true,
+                                maxTicksLimit: 30
+                            },
+                            scaleLabel: {
+                                display: true,
+                                labelString: 'Date'
+                            }
+                        }],
+                        yAxes: [{
+                            ticks: {
+                                beginAtZero: true,
+                                stepSize: 10,
+                                max: 200
+                            },
+                            scaleLabel: {
+                                display: true,
+                                labelString: 'Value'
+                            }
+                        }]
+                    }
+                }
+            });
+
+            // Update chart with data
+
+            vitalsChart.data = chartData;
+            vitalsChart.update();
+        });
+
+        var generateChartButton = document.getElementById("generateChartButton");
+        generateChartButton.addEventListener("click", function () {
+            // Generate chart for selected vital
+            generateChart();
+        });
+
+        var downloadChartButton = document.getElementById("downloadChartButton");
+        downloadChartButton.addEventListener("click", function () {
+            // Download chart
+            var downloadLink = document.getElementById("downloadLink");
+            downloadLink.href = vitalsChart.toBase64Image();
+            downloadLink.download = "vitalsChart.png";
+            downloadLink.click();
+        });
+
+        // Generate chart for selected vital
+        generateChart();
+
+    }
+</script> *@
+
+<canvas id="vitalsChart"></canvas>
+
+<select id="vitalsSelect">
+    <option value="HeartRate">Heart Rate</option>
+    <option value="SystolicBP">Systolic BP</option>
+    <option value="DiastolicBP">Diastolic BP</option>
+    <option value="OxygenSaturation">Oxygen Saturation</option>
+</select>
+
+<select id="timePeriodSelect">
+    <option value="1">Last 1 Day</option>
+    <option value="7">Last 7 Days</option>
+    <option value="30">Last 30 Days</option>
+</select>
+
+<button id="generateChartButton">Generate Chart</button>
+<button id="downloadChartButton">Download Chart</button>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    function generateChart() {
+        var vitalsData = @Html.Raw(Json.Serialize(Model));
+
+        var ctx = document.getElementById("vitalsChart").getContext("2d");
+
+        var chartData = {
+            labels: [],
+            datasets: [
+                {
+                    label: "",
+                    data: [],
+                    borderColor: "",
+                    fill: false
+                }
+            ]
+        };
+
+        var vitalsSelect = document.getElementById("vitalsSelect");
+        vitalsSelect.addEventListener("change", function () {
+            var selectedVital = this.value;
+            var label = "";
+            var borderColor = "";
+
+            switch (selectedVital) {
+                case "HeartRate":
+                    label = "Heart Rate";
+                    borderColor = "#3e95cd";
+                    chartData.datasets[0].data = vitalsData.map(function (item) { return item.HeartRate });
+                    break;
+                case "SystolicBP":
+                    label = "Systolic BP";
+                    borderColor = "#8e5ea2";
+                    chartData.datasets[0].data = vitalsData.map(function (item) { return item.SystolicBP });
+                    break;
+                case "DiastolicBP":
+                    label = "Diastolic BP";
+                    borderColor = "#3cba9f";
+                    chartData.datasets[0].data = vitalsData.map(function (item) { return item.DiastolicBP });
+                    break;
+                case "OxygenSaturation":
+                    label = "Oxygen Saturation";
+                    borderColor = "#e8c3b9";
+                    chartData.datasets[0].data = vitalsData.map(function (item) { return item.OxygenSaturation });
+                    break;
+            }
+
+            chartData.datasets[0].label = label;
+            chartData.datasets[0].borderColor = borderColor;
+
+            var dates = vitalsData.map(function (item) { return item.Date });
+            chartData.labels = dates;
+
+            var vitalsChart = new Chart(ctx, {
+                type: "line",
+                data: chartData,
+                options: {
+                    responsive: true,
+                    title: {
+                        display: true,
+                        text: "Vitals Chart"
+                    },
+                    scales: {
+                        xAxes: [{
+                            type: 'time',
+                            time: {
+                                unit: 'day',
+                                displayFormats: {
+                                    day: 'MMM D'
+                                }
+                            },
+                            distribution: 'linear',
+                            ticks: {
+                                source: 'data',
+                                autoSkip: true,
+                                maxTicksLimit: 5
+                            }
+                    }]
+}
+}
+});
+</script>

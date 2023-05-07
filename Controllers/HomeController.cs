@@ -1,4 +1,5 @@
-﻿using FitnessTracker.Models;
+﻿using FitnessTracker.Data;
+using FitnessTracker.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
@@ -11,6 +12,7 @@ namespace FitnessTracker.Controllers
         public HomeController(ILogger<HomeController> logger)
         {
             _logger = logger;
+
         }
 
         public IActionResult Index()

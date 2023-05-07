@@ -15,6 +15,7 @@ namespace FitnessTracker.Models
         public string FitnessGoal { get; set; }
         public DateTime DateOfBirth { get; set; }
         public string Gender { get; set; }
+        // public ICollection<string> Roles { get; set; }
     }
     //public class Workout
     //{
