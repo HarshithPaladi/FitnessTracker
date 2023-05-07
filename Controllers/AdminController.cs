@@ -15,10 +15,12 @@ namespace FitnessTracker.Controllers
     public class AdminController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<FitnessUser> _userManager;
 
-        public AdminController(ApplicationDbContext context)
+        public AdminController(ApplicationDbContext context, UserManager<FitnessUser> userManager)
         {
             _context = context;
+            this._userManager = userManager;
         }
 
         public IActionResult Index()
@@ -76,6 +78,38 @@ namespace FitnessTracker.Controllers
                 TempData["ErrorMessage"] = $"User with id {id} not found.";
             }
 
+            return RedirectToAction(nameof(Index));
+        }
+[HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ChangeUserRole(string userId, string newRole)
+        {
+            // Find the user by ID
+            var user = await _userManager.FindByIdAsync(userId);
+
+            if (user == null)
+            {
+                // Handle error - user not found
+            }
+
+            // Remove all current roles from the user
+            var currentRoles = await _userManager.GetRolesAsync(user);
+            var result = await _userManager.RemoveFromRolesAsync(user, currentRoles);
+
+            if (!result.Succeeded)
+            {
+                // Handle error - failed to remove current roles
+            }
+
+            // Add the new role to the user
+            result = await _userManager.AddToRoleAsync(user, newRole);
+
+            if (!result.Succeeded)
+            {
+                // Handle error - failed to add new role
+            }
+
+            // Redirect to the user list page, or some other appropriate page
             return RedirectToAction(nameof(Index));
         }
 

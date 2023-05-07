@@ -37,6 +37,7 @@
                                 <th>Email</th>
                                 <th>Delete</th>
                                 <th>Reset Password</th>
+                                <th>Change Role</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -64,7 +65,17 @@
                                             <button type="submit" class="btn btn-danger btn-sm">Reset Password</button>
                                         </form>
                                     </td>
-
+                                    <td>
+                                        <form action="/Admin/ChangeUserRole" method="post">
+                                            @Html.AntiForgeryToken()
+                                            <input type="hidden" name="id" value="@user.Id" />
+                                            <select name="role" class="form-select">
+                                                <option value="PremiumUser">PremiumUser</option>
+                                                <option value="Admin">Admin</option>
+                                            </select>
+                                            <button type="submit" class="btn btn-primary btn-sm">Change Role</button>
+                                        </form>
+                                    </td>
                                 </tr>
                             }
                         </tbody>
