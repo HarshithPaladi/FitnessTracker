@@ -3,143 +3,143 @@
 // Create a div to display the chart
 
 <div id="vitalsChart">
-  <div id="vitalsChartForm">
-    <form>
-      <label for="days">Number of days to display: </label>
-      <input type="number" id="days" name="days" min="1" max="30" value="7">
-      <label for="vital">Vital: </label>
-      <select id="vital" name="vital">
-        <option value="weight">Weight</option>
-        <option value="bloodPressure">Blood Pressure</option>
-        <option value="bloodSugar">Blood Sugar</option>
-        <option value="temperature">Temperature</option>
-      </select>
-      <input type="submit" value="Submit">
-    </form>
-  </div>
-  <div id="vitalsChartDisplay">
-    <canvas id="vitalsChartCanvas" width="400" height="400"></canvas>
-  </div>
+<div id="vitalsChartForm">
+<form>
+<label for="days">Number of days to display: </label>
+<input type="number" id="days" name="days" min="1" max="30" value="7">
+<label for="vital">Vital: </label>
+<select id="vital" name="vital">
+<option value="weight">Weight</option>
+<option value="bloodPressure">Blood Pressure</option>
+<option value="bloodSugar">Blood Sugar</option>
+<option value="temperature">Temperature</option>
+</select>
+<input type="submit" value="Submit">
+</form>
+</div>
+<div id="vitalsChartDisplay">
+<canvas id="vitalsChartCanvas" width="400" height="400"></canvas>
+</div>
 
 
- *@
+*@
 @* <h2>Vitals Chart</h2>
 <div id="vitals-chart-form">
-    <form>
-        <label for="days">Number of days to display: </label>
-        <input type="number" id="days" name="days" min="1" max="30" value="7">
-        <label for="vital">Vital: </label>
-        <select id="vital" name="vital">
-            <option value="heartRate">Heart Rate</option>
-            <option value="BP">Blood Pressure</option>
-            <option value="oxygenSaturation">Oxygen Saturation</option>
-        </select>
-        <input type="submit" value="Submit">
-    </form>
+<form>
+<label for="days">Number of days to display: </label>
+<input type="number" id="days" name="days" min="1" max="30" value="7">
+<label for="vital">Vital: </label>
+<select id="vital" name="vital">
+<option value="heartRate">Heart Rate</option>
+<option value="BP">Blood Pressure</option>
+<option value="oxygenSaturation">Oxygen Saturation</option>
+</select>
+<input type="submit" value="Submit">
+</form>
 <canvas id="vitals-chart"></canvas>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-    var canvas = document.getElementById('vitals-chart');
-    var ctx = canvas.getContext('2d');
+var canvas = document.getElementById('vitals-chart');
+var ctx = canvas.getContext('2d');
 
-    var apiUrl = '/api/VitalsAPI/GetVitals';
+var apiUrl = '/api/VitalsAPI/GetVitals';
 // get days from form
 // get type from form
-    var days = document.getElementById('days').value;
-    var type = document.getElementById('vital').value;
+var days = document.getElementById('days').value;
+var type = document.getElementById('vital').value;
 
-    var chartData = {};
+var chartData = {};
 
-    fetch(apiUrl + '?days=' + days + '&type=' + type)
-        .then(response => response.json())
-        .then(data => {
-            chartData = {
-                labels: data.map(vital => vital.date),
-                datasets: [
-                    {
-                        label: type,
-                        data: data.map(vital => vital[type]),
-                        fill: false,
-                        borderColor: 'rgb(75, 192, 192)',
-                        tension: 0.1
-                    }
-                ]
-            };
+fetch(apiUrl + '?days=' + days + '&type=' + type)
+.then(response => response.json())
+.then(data => {
+chartData = {
+labels: data.map(vital => vital.date),
+datasets: [
+{
+label: type,
+data: data.map(vital => vital[type]),
+fill: false,
+borderColor: 'rgb(75, 192, 192)',
+tension: 0.1
+}
+]
+};
 
-            var chart = new Chart(ctx, {
-                type: 'line',
-                data: chartData,
-                options: {
-                    scales: {
-                        y: {
-                            beginAtZero: true
-                        }
-                    }
-                }
-            });
-        })
-        .catch(error => console.error(error));
+var chart = new Chart(ctx, {
+type: 'line',
+data: chartData,
+options: {
+scales: {
+y: {
+beginAtZero: true
+}
+}
+}
+});
+})
+.catch(error => console.error(error));
 </script> *@
 
 @* <h2>Vitals Chart</h2>
 <div id="vitals-chart-form">
-    <form>
-        <label for="days">Number of days to display: </label>
-        <input type="number" id="days" name="days" min="1" max="30" value="7">
-        <label for="vital">Vital: </label>
-        <select id="vital" name="vital">
-            <option value="heartRate">Heart Rate</option>
-            <option value="BP">Blood Pressure</option>
-            <option value="oxygenSaturation">Oxygen Saturation</option>
-        </select>
-        <input type="submit" value="Submit">
-    </form>
+<form>
+<label for="days">Number of days to display: </label>
+<input type="number" id="days" name="days" min="1" max="30" value="7">
+<label for="vital">Vital: </label>
+<select id="vital" name="vital">
+<option value="heartRate">Heart Rate</option>
+<option value="BP">Blood Pressure</option>
+<option value="oxygenSaturation">Oxygen Saturation</option>
+</select>
+<input type="submit" value="Submit">
+</form>
 <canvas id="vitals-chart"></canvas>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-    var canvas = document.getElementById('vitals-chart');
-    var ctx = canvas.getContext('2d');
+var canvas = document.getElementById('vitals-chart');
+var ctx = canvas.getContext('2d');
 
-    var apiUrl = '/api/VitalsAPI/GetVitals';
+var apiUrl = '/api/VitalsAPI/GetVitals';
 
-    var chartData = {};
+var chartData = {};
 
-    document.querySelector('#vitals-chart-form form').addEventListener('submit', function(e) {
-        e.preventDefault();
+document.querySelector('#vitals-chart-form form').addEventListener('submit', function(e) {
+e.preventDefault();
 
-        var days = document.getElementById('days').value;
-        var type = document.getElementById('vital').value;
+var days = document.getElementById('days').value;
+var type = document.getElementById('vital').value;
 
-        fetch(apiUrl + '?days=' + days + '&type=' + type)
-            .then(response => response.json())
-            .then(data => {
-                chartData = {
-                    labels: data.map(vital => vital.date),
-                    datasets: [
-                        {
-                            label: type,
-                            data: data.map(vital => vital[type]),
-                            fill: false,
-                            borderColor: 'rgb(75, 192, 192)',
-                            tension: 0.1
-                        }
-                    ]
-                };
+fetch(apiUrl + '?days=' + days + '&type=' + type)
+.then(response => response.json())
+.then(data => {
+chartData = {
+labels: data.map(vital => vital.date),
+datasets: [
+{
+label: type,
+data: data.map(vital => vital[type]),
+fill: false,
+borderColor: 'rgb(75, 192, 192)',
+tension: 0.1
+}
+]
+};
 
-                var chart = new Chart(ctx, {
-                    type: 'line',
-                    data: chartData,
-                    options: {
-                        scales: {
-                            y: {
-                                beginAtZero: true
-                            }
-                        }
-                    }
-                });
-            })
-            .catch(error => console.error(error));
-    });
+var chart = new Chart(ctx, {
+type: 'line',
+data: chartData,
+options: {
+scales: {
+y: {
+beginAtZero: true
+}
+}
+}
+});
+})
+.catch(error => console.error(error));
+});
 </script> *@
 <h2>Vitals Chart</h2>
 <div id="vitals-chart-form">
@@ -154,9 +154,12 @@
         </select>
         <input type="submit" value="Submit">
     </form>
-    <canvas id="vitals-chart" ></canvas>
+    <div class="chart-container">
+        <canvas id="vitals-chart" height="100"></canvas>
+    </div>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/moment/moment.min.js"></script>
 <script>
     var canvas = document.getElementById('vitals-chart');
     var ctx = canvas.getContext('2d');
@@ -172,30 +175,78 @@
         fetch(apiUrl + '?days=' + days + '&type=' + type)
             .then(response => response.json())
             .then(data => {
-                chartData = {
-                    labels: data.map(vital => vital.date),
-                    datasets: [
-                        {
-                            label: type,
-                            data: data.map(vital => vital[type]),
-                            fill: false,
-                            borderColor: 'rgb(75, 192, 192)',
-                            tension: 0.1
-                        }
-                    ]
+                var chartData = {
+                    labels: data.map(vital => moment(vital.date).format('DD/MM/YYYY HH:mm:ss')),
+                    datasets: []
                 };
+
+                if (type === 'BP') {
+                    var systolicData = {
+                        label: 'Systolic BP',
+                        data: data.map(vital => vital.systolicBP),
+                        fill: false,
+                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        borderWidth: 1,
+                        tension: 0.1
+                    };
+                    var diastolicData = {
+                        label: 'Diastolic BP',
+                        data: data.map(vital => vital.diastolicBP),
+                        fill: false,
+                        backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                        borderColor: 'rgba(54, 162, 235, 1)',
+                        borderWidth: 1,
+                        tension: 0.1
+                    };
+                    var bpData = {
+                        label: 'BP',
+                        data: data.map(vital => [vital.systolicBP, vital.diastolicBP]),
+                        fill: false,
+                        type: 'bar',
+                        backgroundColor: ['rgba(75, 192, 192, 0.2)', 'rgba(54, 162, 235, 0.2)'],
+                        borderColor: ['rgba(75, 192, 192, 1)', 'rgba(54, 162, 235, 1)'],
+                        borderWidth: 1,
+                        borderRadius: Number.MAX_VALUE,
+                        borderSkipped: false,
+                        tension: 0.1
+                    };
+                    chartData.datasets.push(bpData);
+                    
+                    @* var bpData = {
+                        label: 'BP',
+                        data: data.map(vital => [vital.systolicBP, vital.diastolicBP]),
+                        fill: false,
+                        backgroundColor: ['rgba(75, 192, 192, 0.2)', 'rgba(54, 162, 235, 0.2)'],
+                        borderColor: ['rgba(75, 192, 192, 1)', 'rgba(54, 162, 235, 1)'],
+                        borderWidth: 1,
+                        tension: 0.1
+                    }; *@
+                } 
+                else {
+                    chartData.datasets.push({
+                        label: type,
+                        data: data.map(vital => vital[type]),
+                        fill: false,
+                        type: 'line',
+                        borderColor: 'rgb(75, 192, 192)',
+                        tension: 0.1
+                    });
+                }
 
                 if (window.chart) {
                     window.chart.data = chartData;
                     window.chart.update();
                 } else {
                     window.chart = new Chart(ctx, {
-                        type: 'line',
+                        
                         data: chartData,
                         options: {
+                            responsive: true,
+                            maintainAspectRatio: true,
                             scales: {
                                 y: {
-                                    beginAtZero: true
+                                    beginAtZero: false
                                 }
                             }
                         }
@@ -208,8 +259,23 @@
     getChartData();
 
     var form = document.getElementById('chart-form');
-    form.addEventListener('submit', function(event) {
+    form.addEventListener('submit', function (event) {
         event.preventDefault();
         getChartData();
     });
+    // Resize the chart canvas when the window is resized
+    function resizeChart() {
+        canvas.width = canvas.parentNode.clientWidth;
+        canvas.height = canvas.parentNode.clientHeight;
+        chart.resize();
+    }
+    window.addEventListener('resize', resizeChart);
+
+    // Resize the chart canvas when the chart data changes
+    function updateChart() {
+        chart.data = chartData;
+        chart.update();
+        resizeChart();
+    }
+    updateChart();
 </script>

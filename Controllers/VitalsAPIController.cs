@@ -77,7 +77,7 @@ namespace FitnessTracker.Controllers
                 vitalsQuery = vitalsQuery.Where(v => v.GetType().GetProperty(type) != null);
             }
 
-            var vitalsList = vitalsQuery.ToList();
+            var vitalsList = vitalsQuery.ToList().OrderBy(v => v.Date);
 
             return Ok(vitalsList);
         }
