@@ -16,18 +16,22 @@ namespace FitnessTracker.Controllers
     {
         private readonly ApplicationDbContext _context;
         private readonly UserManager<FitnessUser> _userManager;
+        private readonly RoleManager<IdentityRole> _roleManager;
 
-        public AdminController(ApplicationDbContext context, UserManager<FitnessUser> userManager)
+        public AdminController(ApplicationDbContext context, UserManager<FitnessUser> userManager, RoleManager<IdentityRole> roleManager)
         {
             _context = context;
             this._userManager = userManager;
+            this._roleManager = roleManager;
         }
+
 
         public IActionResult Index()
         {
             // Get the count of all users except for the current user (admin)
-            int userCount = _context.FitnessUsers.Count() - 1;
-
+            int userCount = _context.FitnessUsers.Count() - _userManager.GetUsersInRoleAsync("Admin").Result.Count();
+            // Get the count of all users whose role is "PremiumUser"
+            int premiumUserCount = _userManager.GetUsersInRoleAsync("PremiumUser").Result.Count();
             // Get a list of all users except for the current user (admin)
             var userList = _context.FitnessUsers
                 .Where(u => u.Id != User.Identity.Name)
@@ -35,6 +39,7 @@ namespace FitnessTracker.Controllers
 
             // Pass the user count and list of users to the view
             ViewData["UserCount"] = userCount;
+            ViewData["PremiumUserCount"] = premiumUserCount;
             return View(userList);
         }
         // POST: Admin/DeleteUser/5

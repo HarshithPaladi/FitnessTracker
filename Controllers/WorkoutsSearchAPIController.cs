@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 
 namespace FitnessTracker.Controllers
 {
@@ -28,6 +29,7 @@ namespace FitnessTracker.Controllers
         }
 
         // GET: api/WorkoutsSearchAPI/Search/{searchTerm}
+        [Authorize]
         [HttpGet("Search/{searchTerm}")]
         public async Task<ActionResult<IEnumerable<WorkoutsModel>>> SearchWorkouts(string searchTerm)
         {

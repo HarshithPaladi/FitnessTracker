@@ -39,8 +39,9 @@ namespace FitnessTracker
             // if (!roleExists)
             // {
             //     await roleManager.CreateAsync(role);
-            // }
-
+            // 
+            // verify role assigned to user
+            //var userRoles2 = await userManager.GetRolesAsync(user);
             // // Create the "PremiumUser" role
             // var role2 = new IdentityRole { Name = "PremiumUser" };
             // var roleExists2 = await roleManager.RoleExistsAsync("PremiumUser");
